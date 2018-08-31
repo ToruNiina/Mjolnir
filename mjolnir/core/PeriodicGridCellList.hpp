@@ -30,8 +30,8 @@ class PeriodicGridCellList
 
     typedef parameterT parameter_type;
     typedef NeighborList<parameter_type> neighbor_list_type;
-    typedef typename neighbor_list_type::neighbor_type neighbor_type;
-    typedef typename neighbor_list_type::range_type    range_type;
+    typedef typename neighbor_list_type::neighbor_type  neighbor_type;
+    typedef typename neighbor_list_type::const_iterator const_iterator;
 
     constexpr static real_type mesh_epsilon = 1e-6;
 
@@ -82,7 +82,8 @@ class PeriodicGridCellList
     real_type cutoff() const {return this->cutoff_;}
     real_type margin() const {return this->margin_;}
 
-    range_type partners(std::size_t i) const noexcept {return neighbors_[i];}
+    const_iterator begin() const noexcept {return this->neighbors_.begin();}
+    const_iterator end()   const noexcept {return this->neighbors_.end();}
 
   private:
 
@@ -207,13 +208,13 @@ void PeriodicGridCellList<traitsT, parameterT>::make(
                 if(length_sq(sys.adjust_direction(sys[j].position - ri)) < r_c2)
                 {
                     MJOLNIR_LOG_DEBUG("add index", j, "to verlet list", i);
-                    partner.emplace_back(j, pot.prepair_params(i, j));
+                    partner.emplace_back(i, j, pot.prepair_params(i, j));
                 }
             }
         }
         // make the result consistent with NaivePairCalculation...
         std::sort(partner.begin(), partner.end());
-        this->neighbors_.add_list_for(i, partner.begin(), partner.end());
+        this->neighbors_.append(partner.begin(), partner.end());
     }
 
     this->current_margin_ = cutoff_ * margin_;

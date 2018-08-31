@@ -23,8 +23,8 @@ class VerletList
 
     typedef parameterT parameter_type;
     typedef NeighborList<parameter_type> neighbor_list_type;
-    typedef typename neighbor_list_type::neighbor_type neighbor_type;
-    typedef typename neighbor_list_type::range_type    range_type;
+    typedef typename neighbor_list_type::neighbor_type  neighbor_type;
+    typedef typename neighbor_list_type::const_iterator const_iterator;
 
   public:
 
@@ -67,7 +67,8 @@ class VerletList
     real_type cutoff() const noexcept {return this->cutoff_;}
     real_type margin() const noexcept {return this->margin_;}
 
-    range_type partners(std::size_t i) const noexcept {return neighbors_[i];}
+    const_iterator begin() const noexcept {return this->neighbors_.begin();}
+    const_iterator end()   const noexcept {return this->neighbors_.end();}
 
   private:
 
@@ -112,10 +113,10 @@ void VerletList<traitsT, parameterT>::make(
             const auto& rj = sys[j].position;
             if(length_sq(sys.adjust_direction(rj - ri)) < rc2)
             {
-                partners.emplace_back(j, pot.prepair_params(i, j));
+                partners.emplace_back(i, j, pot.prepair_params(i, j));
             }
         }
-        this->neighbors_.add_list_for(i, partners.begin(), partners.end());
+        this->neighbors_.append(partners.begin(), partners.end());
     }
     this->current_margin_ = cutoff_ * margin_;
     return ;

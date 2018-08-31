@@ -71,25 +71,23 @@ void GlobalPairInteraction<traitsT, potT, spaceT>::calc_force(
         system_type& sys)
 {
     partition_.update(sys, this->potential_);
-    for(std::size_t i=0; i<sys.size(); ++i)
+    for(const auto& ptnr : this->partition_)
     {
-        for(const auto& ptnr : this->partition_.partners(i))
-        {
-            const auto  j     = ptnr.index;
-            const auto& param = ptnr.parameter();
+        const auto  i     = ptnr.i;
+        const auto  j     = ptnr.j;
+        const auto& param = ptnr.parameter();
 
-            const coordinate_type rij =
-                sys.adjust_direction(sys[j].position - sys[i].position);
-            const real_type l = length(rij);
-            const real_type f_mag = potential_.derivative(l, param);
+        const coordinate_type rij =
+            sys.adjust_direction(sys[j].position - sys[i].position);
+        const real_type l = length(rij);
+        const real_type f_mag = potential_.derivative(l, param);
 
-            // if length exceeds cutoff, potential returns just 0.
-            if(f_mag == 0.0){continue;}
+        // if length exceeds cutoff, potential returns just 0.
+        if(f_mag == 0.0){continue;}
 
-            const coordinate_type f = rij * (f_mag / l);
-            sys[i].force += f;
-            sys[j].force -= f;
-        }
+        const coordinate_type f = rij * (f_mag / l);
+        sys[i].force += f;
+        sys[j].force -= f;
     }
     return ;
 }
@@ -100,17 +98,15 @@ GlobalPairInteraction<traitsT, potT, spaceT>::calc_energy(
         const system_type& sys) const
 {
     real_type e = 0.0;
-    for(std::size_t i=0; i<sys.size(); ++i)
+    for(const auto& ptnr : this->partition_)
     {
-        for(const auto& ptnr : this->partition_.partners(i))
-        {
-            const auto  j     = ptnr.index;
-            const auto& param = ptnr.parameter();
+        const auto  i     = ptnr.i;
+        const auto  j     = ptnr.j;
+        const auto& param = ptnr.parameter();
 
-            const real_type l = length(
-                sys.adjust_direction(sys[j].position - sys[i].position));
-            e += potential_.potential(l, param);
-        }
+        const real_type l = length(
+            sys.adjust_direction(sys[j].position - sys[i].position));
+        e += potential_.potential(l, param);
     }
     return e;
 }

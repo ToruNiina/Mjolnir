@@ -70,30 +70,28 @@ class GlobalPairInteraction<traitsT,
         constexpr auto  cutoff_ratio_sq = cutoff_ratio * cutoff_ratio;
         const     auto& param           = potential_.parameters();
         const     auto  epsilon12       = 12 * potential_.epsilon();
-        for(std::size_t i=0; i<sys.size(); ++i)
+        for(const auto& ptnr : this->partition_)
         {
-            for(const auto& ptnr : this->partition_.partners(i))
-            {
-                const auto  j     = ptnr.index;
-                const auto& param = ptnr.parameter(); // sum of radius
+            const auto  i     = ptnr.i;
+            const auto  j     = ptnr.j;
+            const auto& param = ptnr.parameter(); // sum of radius
 
-                const coordinate_type rij =
-                    sys.adjust_direction(sys[j].position - sys[i].position);
-                const real_type l_sq = length_sq(rij);
+            const coordinate_type rij =
+                sys.adjust_direction(sys[j].position - sys[i].position);
+            const real_type l_sq = length_sq(rij);
 
-                const real_type sigma_sq = param * param;
-                if(sigma_sq * cutoff_ratio_sq < l_sq) {continue;}
+            const real_type sigma_sq = param * param;
+            if(sigma_sq * cutoff_ratio_sq < l_sq) {continue;}
 
-                const real_type rcp_l_sq = 1 / l_sq;
-                const real_type s2l2   = sigma_sq * rcp_l_sq;
-                const real_type s6l6   = s2l2 * s2l2 * s2l2;
+            const real_type rcp_l_sq = 1 / l_sq;
+            const real_type s2l2   = sigma_sq * rcp_l_sq;
+            const real_type s6l6   = s2l2 * s2l2 * s2l2;
 
-                const coordinate_type f = rij *
-                    (-epsilon12 * s6l6 * s6l6 * rcp_l_sq);
+            const coordinate_type f = rij *
+                (-epsilon12 * s6l6 * s6l6 * rcp_l_sq);
 
-                sys[i].force += f;
-                sys[j].force -= f;
-            }
+            sys[i].force += f;
+            sys[j].force -= f;
         }
         return ;
     }
@@ -107,25 +105,23 @@ class GlobalPairInteraction<traitsT,
         constexpr auto  coef_at_cutoff  = potential_type::coef_at_cutoff;
         const     auto& param           = potential_.parameters();
         const     auto  epsilon         = potential_.epsilon();
-        for(std::size_t i=0; i<sys.size(); ++i)
+        for(const auto& ptnr : this->partition_)
         {
-            for(const auto& ptnr : this->partition_.partners(i))
-            {
-                const auto  j     = ptnr.index;
-                const auto& param = ptnr.parameter();
+            const auto  i     = ptnr.i;
+            const auto  j     = ptnr.j;
+            const auto& param = ptnr.parameter();
 
-                const coordinate_type rij =
-                    sys.adjust_direction(sys[j].position - sys[i].position);
-                const real_type l_sq = length_sq(rij);
+            const coordinate_type rij =
+                sys.adjust_direction(sys[j].position - sys[i].position);
+            const real_type l_sq = length_sq(rij);
 
-                const real_type sigma_sq = param * param;
-                if(sigma_sq * cutoff_ratio_sq < l_sq) {continue;}
+            const real_type sigma_sq = param * param;
+            if(sigma_sq * cutoff_ratio_sq < l_sq) {continue;}
 
-                const real_type s2l2 = sigma_sq / l_sq;
-                const real_type s6l6 = s2l2 * s2l2 * s2l2;
+            const real_type s2l2 = sigma_sq / l_sq;
+            const real_type s6l6 = s2l2 * s2l2 * s2l2;
 
-                E += epsilon * (s6l6 * s6l6 - coef_at_cutoff);
-            }
+            E += epsilon * (s6l6 * s6l6 - coef_at_cutoff);
         }
         return E;
     }

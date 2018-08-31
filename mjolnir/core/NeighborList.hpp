@@ -68,11 +68,11 @@ struct neighbor_element
         detail::neighbor_element_impl<paramT, std::is_empty<paramT>::value>;
     using parameter_type = typename base_type::parameter_type;
 
-    neighbor_element(std::size_t idx, const paramT& p)
-        : base_type(p), index(idx)
+    neighbor_element(std::size_t idx, std::size_t jdx, const paramT& p)
+        : base_type(p), i(idx), j(jdx)
     {}
-    neighbor_element(std::size_t idx, paramT&& p)
-        : base_type(std::move(p)), index(idx)
+    neighbor_element(std::size_t idx, std::size_t jdx, paramT&& p)
+        : base_type(std::move(p)), i(idx), j(jdx)
     {}
 
     neighbor_element()  = default;
@@ -85,47 +85,44 @@ struct neighbor_element
     parameter_type&       parameter()       noexcept {return base_type::parameter();}
     parameter_type const& parameter() const noexcept {return base_type::parameter();}
 
-    std::size_t index;
+    std::size_t i, j;
 };
-
-static_assert(sizeof(std::size_t) == sizeof(neighbor_element<empty_t>),
-              "checking neighbor_element reduces size of empty object");
 
 template<typename paramT>
 inline bool operator==(
     const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
 {
-    return lhs.index == rhs.index;
+    return (lhs.i == rhs.i) && (lhs.j == rhs.j);
 }
 template<typename paramT>
 inline bool operator!=(
     const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
 {
-    return lhs.index != rhs.index;
+    return !(lhs == rhs);
 }
 template<typename paramT>
 inline bool operator<(
     const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
 {
-    return lhs.index < rhs.index;
-}
-template<typename paramT>
-inline bool operator>(
-    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
-{
-    return lhs.index > rhs.index;
+    return (lhs.i == rhs.i) ? (lhs.j < rhs.j) : (lhs.i < rhs.i);
 }
 template<typename paramT>
 inline bool operator<=(
     const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
 {
-    return lhs.index <= rhs.index;
+    return (lhs == rhs) || (lhs < rhs);
+}
+template<typename paramT>
+inline bool operator>(
+    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
+{
+    return !(lhs <= rhs);
 }
 template<typename paramT>
 inline bool operator>=(
     const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
 {
-    return lhs.index >= rhs.index;
+    return !(lhs < rhs);
 }
 
 template<typename parameterT>
@@ -135,7 +132,8 @@ class NeighborList
     using parameter_type = parameterT;
     using neighbor_type  = neighbor_element<parameter_type>;
     using container_type = std::vector<neighbor_type>;
-    using range_type     = range<typename container_type::const_iterator>;
+    using iterator       = typename container_type::iterator;
+    using const_iterator = typename container_type::const_iterator;
 
   public:
 
@@ -146,55 +144,48 @@ class NeighborList
     NeighborList& operator=(const NeighborList&) = default;
     NeighborList& operator=(NeighborList&&)      = default;
 
-    void clear()
-    {
-        this->neighbors_.clear();
-        this->ranges_.clear();
-        return;
-    }
+    void clear() {this->neighbors_.clear();}
 
+    // if number of particles inside of cutoff length could be known, it might
+    // increase runtime speed a bit
     void reserve(std::size_t Nparticle, std::size_t Nneighbor)
     {
         this->neighbors_.reserve(Nparticle * Nneighbor);
-        this->ranges_   .reserve(Nparticle);
-        return;
+    }
+
+    void push_back(const neighbor_type& n)
+    {
+        this->neighbors_.push_back(n);
+    }
+    void push_back(neighbor_type&& n)
+    {
+        this->neighbors_.push_back(std::move(n));
+    }
+
+    template<typename ... Ts>
+    void emplace_back(Ts&& ... args)
+    {
+        this->neighbors_.emplace_back(std::forward<Ts>(args)...);
     }
 
     template<typename Iterator>
-    void add_list_for(const std::size_t i, Iterator first, Iterator last)
+    void append(Iterator first, Iterator last)
     {
-        if(this->ranges_.size() <= i)
-        {
-            this->ranges_.resize(i+1, {0,0});
-        }
-        ranges_[i].first  = neighbors_.size();
-        ranges_[i].second = neighbors_.size() + std::distance(first, last);
+        static_assert(std::is_same<neighbor_type,
+            typename std::iterator_traits<Iterator>::value_type>::value,
+            "iterator value_type must be the same as neighbor_type");
 
-        // this might break iterator.
-        // this->ranges_ cannot contain pair of iteraor but indices.
         std::copy(first, last, std::back_inserter(this->neighbors_));
         return ;
     }
 
-    range_type operator[](const std::size_t i) const noexcept
-    {
-        return range_type{
-            this->neighbors_.begin() + this->ranges_[i].first,
-            this->neighbors_.begin() + this->ranges_[i].second
-        };
-    }
-    range_type at(const std::size_t i) const
-    {
-        return range_type{
-            this->neighbors_.begin() + this->ranges_.at(i).first,
-            this->neighbors_.begin() + this->ranges_.at(i).second
-        };
-    }
+    const_iterator  begin() const noexcept {return neighbors_.cbegin();}
+    const_iterator  end()   const noexcept {return neighbors_.cend();}
+    const_iterator cbegin() const noexcept {return neighbors_.cbegin();}
+    const_iterator cend()   const noexcept {return neighbors_.cend();}
 
   private:
     container_type neighbors_;
-    std::vector<std::pair<std::size_t, std::size_t>> ranges_;
-    // consider to use flat_map when a few particle interacts?
 };
 
 } // mjolnir

@@ -73,28 +73,26 @@ class GlobalPairInteraction<traitsT,
         const     auto r_cutoff_sq     = cutoff_ratio_sq * sigma_sq;
         const     auto epsilon         = this->potential_.epsilon();
 
-        for(std::size_t i=0; i<sys.size(); ++i)
+        for(const auto& ptnr : this->partition_)
         {
-            for(const auto& ptnr : this->partition_.partners(i))
-            {
-                const auto j = ptnr.index;
+            const auto i = ptnr.i;
+            const auto j = ptnr.j;
 
-                const coordinate_type rij =
-                    sys.adjust_direction(sys[j].position - sys[i].position);
-                const real_type l_sq = length_sq(rij);
+            const coordinate_type rij =
+                sys.adjust_direction(sys[j].position - sys[i].position);
+            const real_type l_sq = length_sq(rij);
 
-                if(r_cutoff_sq < l_sq) {continue;}
+            if(r_cutoff_sq < l_sq) {continue;}
 
-                const real_type rcp_l_sq = 1 / l_sq;
-                const real_type s2l2 = sigma_sq * rcp_l_sq;
-                const real_type s6l6 = s2l2 * s2l2 * s2l2;
+            const real_type rcp_l_sq = 1 / l_sq;
+            const real_type s2l2 = sigma_sq * rcp_l_sq;
+            const real_type s6l6 = s2l2 * s2l2 * s2l2;
 
-                const coordinate_type f = rij *
-                    (24 * epsilon * (s6l6 - 2 * s6l6 * s6l6) * rcp_l_sq);
+            const coordinate_type f = rij *
+                (24 * epsilon * (s6l6 - 2 * s6l6 * s6l6) * rcp_l_sq);
 
-                sys[i].force += f;
-                sys[j].force -= f;
-            }
+            sys[i].force += f;
+            sys[j].force -= f;
         }
         return ;
     }
@@ -111,23 +109,21 @@ class GlobalPairInteraction<traitsT,
         const     auto r_cutoff_sq     = cutoff_ratio_sq * sigma_sq;
         const     auto epsilon         = this->potential_.epsilon();
 
-        for(std::size_t i=0; i<sys.size(); ++i)
+        for(const auto& ptnr : this->partition_)
         {
-            for(const auto& ptnr : this->partition_.partners(i))
-            {
-                const auto j = ptnr.index;
+            const auto i = ptnr.i;
+            const auto j = ptnr.j;
 
-                const coordinate_type rij =
-                    sys.adjust_direction(sys[j].position - sys[i].position);
-                const real_type l_sq = length_sq(rij);
+            const coordinate_type rij =
+                sys.adjust_direction(sys[j].position - sys[i].position);
+            const real_type l_sq = length_sq(rij);
 
-                if(r_cutoff_sq < l_sq) {continue;}
+            if(r_cutoff_sq < l_sq) {continue;}
 
-                const real_type s2l2 = sigma_sq / l_sq;
-                const real_type s6l6 = s2l2 * s2l2 * s2l2;
+            const real_type s2l2 = sigma_sq / l_sq;
+            const real_type s6l6 = s2l2 * s2l2 * s2l2;
 
-                E += 4 * epsilon * (s6l6 * s6l6 - s6l6 - coef_at_cutoff);
-            }
+            E += 4 * epsilon * (s6l6 * s6l6 - s6l6 - coef_at_cutoff);
         }
         return E;
     }
