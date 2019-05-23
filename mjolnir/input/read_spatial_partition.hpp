@@ -5,6 +5,7 @@
 #include <mjolnir/core/PeriodicGridCellList.hpp>
 #include <mjolnir/core/NaivePairCalculation.hpp>
 #include <mjolnir/core/VerletList.hpp>
+#include <mjolnir/core/FastNBLVerletList.hpp>
 #include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/logger.hpp>
 
@@ -58,6 +59,40 @@ struct celllist_dispatcher<
 };
 
 // ---------------------------------------------------------------------------
+template<typename boundaryT, typename traitsT, typename parameterT>
+struct fastNBL_dispatcher;
+
+// implementation for Unlimited Boundary case.
+template<typename realT, typename coordT, typename traitsT, typename parameterT>
+struct fastNBL_dispatcher<
+    UnlimitedBoundary<realT, coordT>, traitsT, parameterT
+    >
+{
+    using real_type = realT;
+    using type      = UnlimitedFastNBLVerletList<traitsT, parameterT>;
+
+    static type invoke(const real_type margin)
+    {
+        return type(margin);
+    }
+};
+
+// implementation for Cuboidal Periodic Boundary case.
+template<typename realT, typename coordT, typename traitsT, typename parameterT>
+struct fastNBL_dispatcher<
+    CuboidalPeriodicBoundary<realT, coordT>, traitsT, parameterT
+    >
+{
+    using real_type = realT;
+    using type      = UnlimitedFastNBLVerletList<traitsT, parameterT>; // XXX
+
+    static type invoke(const real_type)
+    {
+        throw std::invalid_argument("FastNBL is not implemented for Periodic Boundary");
+    }
+};
+
+// ---------------------------------------------------------------------------
 // It reads spatial partition that is dedicated for a GlobalPotential.
 // In most of the cases, "type" would be a "CellList".
 //
@@ -87,6 +122,19 @@ read_spatial_partition(const toml::value& global, potentialT&& pot)
                            "with relative margin = ", margin);
         return make_unique<
             GlobalPairInteraction<traitsT, potentialT, celllist_type>
+            >(std::forward<potentialT>(pot), dispatcher::invoke(margin));
+    }
+    else if(type == "FastNBLVerletList")
+    {
+        using boundary_type = typename traitsT::boundary_type;
+        using dispatcher    = fastNBL_dispatcher<boundary_type, traitsT, parameter_type>;
+        using fastNBL_type  = typename dispatcher::type;
+
+        const auto margin = toml::find<real_type>(sp, "margin");
+        MJOLNIR_LOG_NOTICE("-- Spatial Partition is FastNBLVerletList "
+                           "with relative margin = ", margin);
+        return make_unique<
+            GlobalPairInteraction<traitsT, potentialT, fastNBL_type>
             >(std::forward<potentialT>(pot), dispatcher::invoke(margin));
     }
     else if(type == "VerletList")
