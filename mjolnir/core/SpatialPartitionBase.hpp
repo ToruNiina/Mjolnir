@@ -24,10 +24,11 @@ class SpatialPartitionBase
     using boundary_type       = typename traits_type::boundary_type;
     using real_type           = typename traits_type::real_type;
     using coordinate_type     = typename traits_type::coordinate_type;
+    using index_type          = typename traits_type::index_type;
 
     using potential_type      = PotentialT;
     using pair_parameter_type = typename potential_type::pair_parameter_type;
-    using neighbor_list_type  = NeighborList<pair_parameter_type>;
+    using neighbor_list_type  = NeighborList<pair_parameter_type, index_type>;
     using neighbor_type       = typename neighbor_list_type::neighbor_type;
     using range_type          = typename neighbor_list_type::range_type;
 
@@ -65,10 +66,11 @@ class SpatialPartition
     using boundary_type       = typename traits_type::boundary_type;
     using real_type           = typename traits_type::real_type;
     using coordinate_type     = typename traits_type::coordinate_type;
+    using index_type          = typename traits_type::index_type;
 
     using potential_type      = PotentialT;
     using pair_parameter_type = typename potential_type::pair_parameter_type;
-    using neighbor_list_type  = NeighborList<pair_parameter_type>;
+    using neighbor_list_type  = NeighborList<pair_parameter_type, index_type>;
     using neighbor_type       = typename neighbor_list_type::neighbor_type;
     using range_type          = typename neighbor_list_type::range_type;
 

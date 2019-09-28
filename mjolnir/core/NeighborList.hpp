@@ -74,18 +74,19 @@ struct neighbor_element_impl<paramT, false>
 
 } // detail
 
-template<typename paramT>
+template<typename paramT, typename indexT>
 struct neighbor_element
 : private detail::neighbor_element_impl<paramT, std::is_empty<paramT>::value>
 {
     using base_type =
         detail::neighbor_element_impl<paramT, std::is_empty<paramT>::value>;
     using parameter_type = typename base_type::parameter_type;
+    using index_type     = indexT;
 
-    neighbor_element(std::size_t idx, const paramT& p)
+    neighbor_element(index_type idx, const paramT& p)
         : base_type(p), index(idx)
     {}
-    neighbor_element(std::size_t idx, paramT&& p)
+    neighbor_element(index_type idx, paramT&& p)
         : base_type(std::move(p)), index(idx)
     {}
 
@@ -100,47 +101,49 @@ struct neighbor_element
     parameter_type const& parameter() const noexcept {return base_type::parameter();}
 
     // paramT param; // derived from neighbor_element_impl
-    std::size_t index;
+    index_type index;
 };
 
 // Check the EBO works and the size of neighbor_element with empty class
 // is equal to the size of `std::size_t index;`.
-static_assert(sizeof(std::size_t) == sizeof(neighbor_element<empty_t>),
+static_assert(sizeof(std::size_t)   == sizeof(neighbor_element<empty_t, std::size_t>),
+              "checking neighbor_element reduces size of empty object");
+static_assert(sizeof(std::uint32_t) == sizeof(neighbor_element<empty_t, std::uint32_t>),
               "checking neighbor_element reduces size of empty object");
 
-template<typename paramT>
-inline bool operator==(
-    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
+template<typename paramT, typename indexT>
+inline bool operator==(const neighbor_element<paramT, indexT>& lhs,
+                       const neighbor_element<paramT, indexT>& rhs)
 {
     return lhs.index == rhs.index;
 }
-template<typename paramT>
-inline bool operator!=(
-    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
+template<typename paramT, typename indexT>
+inline bool operator!=(const neighbor_element<paramT, indexT>& lhs,
+                       const neighbor_element<paramT, indexT>& rhs)
 {
     return lhs.index != rhs.index;
 }
-template<typename paramT>
-inline bool operator<(
-    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
+template<typename paramT, typename indexT>
+inline bool operator<(const neighbor_element<paramT, indexT>& lhs,
+                      const neighbor_element<paramT, indexT>& rhs)
 {
     return lhs.index < rhs.index;
 }
-template<typename paramT>
-inline bool operator>(
-    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
+template<typename paramT, typename indexT>
+inline bool operator>(const neighbor_element<paramT, indexT>& lhs,
+                      const neighbor_element<paramT, indexT>& rhs)
 {
     return lhs.index > rhs.index;
 }
-template<typename paramT>
-inline bool operator<=(
-    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
+template<typename paramT, typename indexT>
+inline bool operator<=(const neighbor_element<paramT, indexT>& lhs,
+                       const neighbor_element<paramT, indexT>& rhs)
 {
     return lhs.index <= rhs.index;
 }
-template<typename paramT>
-inline bool operator>=(
-    const neighbor_element<paramT>& lhs, const neighbor_element<paramT>& rhs)
+template<typename paramT, typename indexT>
+inline bool operator>=(const neighbor_element<paramT, indexT>& lhs,
+                       const neighbor_element<paramT, indexT>& rhs)
 {
     return lhs.index >= rhs.index;
 }
@@ -148,12 +151,13 @@ inline bool operator>=(
 // ----------------------------------------------------------------------------
 // neighbor list
 
-template<typename parameterT>
+template<typename parameterT, typename indexT>
 class NeighborList
 {
   public:
     using parameter_type = parameterT;
-    using neighbor_type  = neighbor_element<parameter_type>;
+    using index_type     = indexT;
+    using neighbor_type  = neighbor_element<parameter_type, index_type>;
     using container_type = std::vector<neighbor_type>;
     using range_type     = range<typename container_type::const_iterator>;
 
@@ -241,16 +245,16 @@ class NeighborList
     }
 
   private:
-    container_type           neighbors_;
-    std::vector<std::size_t> ranges_;
+    container_type          neighbors_;
+    std::vector<index_type> ranges_;
 };
 
 #ifdef MJOLNIR_SEPARATE_BUILD
-extern template class NeighborList<empty_t>;
-extern template class NeighborList<float >;
-extern template class NeighborList<double>;
-extern template class NeighborList<std::pair<float , float >>;
-extern template class NeighborList<std::pair<double, double>>;
+extern template class NeighborList<empty_t, std::uint32_t>;
+extern template class NeighborList<float,  std::uint32_t>;
+extern template class NeighborList<double, std::uint32_t>;
+extern template class NeighborList<std::pair<float , float >, std::uint32_t>;
+extern template class NeighborList<std::pair<double, double>, std::uint32_t>;
 #endif// MJOLNIR_SEPARATE_BUILD
 
 } // mjolnir
