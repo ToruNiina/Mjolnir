@@ -10,12 +10,11 @@ template<typename realT, template<typename, typename> class boundaryT>
 struct OpenMPSimulatorTraits
 {
     using real_type       = realT;
+    using index_type      = std::uint32_t;
     using coordinate_type = math::Vector<real_type, 3>;
-
-    using matrix33_type = math::Matrix<real_type, 3, 3>;
-    using matrix44_type = math::Matrix<real_type, 4, 4>;
-
-    using boundary_type = boundaryT<real_type, coordinate_type>;
+    using matrix33_type   = math::Matrix<real_type, 3, 3>;
+    using matrix44_type   = math::Matrix<real_type, 4, 4>;
+    using boundary_type   = boundaryT<real_type, coordinate_type>;
 };
 
 } // mjolnir
