@@ -15,13 +15,15 @@
 BOOST_AUTO_TEST_CASE(test_NeighborList_no_parameter)
 {
     mjolnir::LoggerManager::set_default_logger("test_neighbor_list.log");
-    using parameter_type  = mjolnir::empty_t; // XXX
+    using parameter_type     = mjolnir::empty_t; // XXX
+    using index_type         = std::uint32_t;
+    using neighbor_list_type = mjolnir::NeighborList<parameter_type, index_type>;
+    using neighbor_type      = typename neighbor_list_type::neighbor_type;
 
-    mjolnir::NeighborList<parameter_type> nlist;
-    using neighbor_type =
-        typename mjolnir::NeighborList<parameter_type>::neighbor_type;
-
-    static_assert(sizeof(neighbor_type) == sizeof(std::size_t), "");
+    neighbor_list_type nlist;
+    static_assert(sizeof(neighbor_type) == sizeof(index_type),
+                  "if size of parameter is zero, the size of neighbor type must"
+                  " be the same as index_type because no other members there");
 
     // construct dummy neighbor list
     const std::size_t N = 100;
@@ -53,15 +55,12 @@ BOOST_AUTO_TEST_CASE(test_NeighborList_with_parameter)
 {
     mjolnir::LoggerManager::set_default_logger("test_neighbor_list.log");
     // contain this parameter to neighbor list
-    using parameter_type  = std::pair<std::size_t, std::size_t>;
+    using parameter_type     = std::pair<std::size_t, std::size_t>;
+    using index_type         = std::uint32_t;
+    using neighbor_list_type = mjolnir::NeighborList<parameter_type, index_type>;
+    using neighbor_type      = typename neighbor_list_type::neighbor_type;
 
-    mjolnir::NeighborList<parameter_type> nlist;
-    using neighbor_type =
-        typename mjolnir::NeighborList<parameter_type>::neighbor_type;
-
-    static_assert(
-        sizeof(neighbor_type) == sizeof(std::size_t) + sizeof(parameter_type),
-        "");
+    neighbor_list_type nlist;
 
     // construct dummy neighbor list
     const std::size_t N = 100;
