@@ -18,9 +18,12 @@ namespace mjolnir
 // from interacting pairs.
 // This class constructs a list that contains a list of pairs that are excluded
 // from interacting pairs using information in a topology.
+template<typename indexT>
 class ExclusionList
 {
   public:
+    using index_type           = indexT;
+
     using topology_type        = Topology;
     using molecule_id_type     = topology_type::molecule_id_type;
     using group_id_type        = topology_type::group_id_type;
@@ -243,26 +246,26 @@ class ExclusionList
 
   private:
 
-    range<typename std::vector<std::size_t>::const_iterator>
+    range<typename std::vector<index_type>::const_iterator>
     ignored_idx_of(const std::size_t i) const noexcept
     {
-        return range<typename std::vector<std::size_t>::const_iterator>{
+        return range<typename std::vector<index_type>::const_iterator>{
             this->ignored_idxs_.begin() + this->idx_ranges_[i].first,
             this->ignored_idxs_.begin() + this->idx_ranges_[i].second
         };
     }
-    range<typename std::vector<std::size_t>::const_iterator>
+    range<typename std::vector<index_type>::const_iterator>
     ignored_mol_of(const std::size_t i) const noexcept
     {
-        return range<typename std::vector<std::size_t>::const_iterator>{
+        return range<typename std::vector<index_type>::const_iterator>{
             this->ignored_mols_.begin() + this->mol_ranges_[i].first,
             this->ignored_mols_.begin() + this->mol_ranges_[i].second
         };
     }
-    range<typename std::vector<std::size_t>::const_iterator>
+    range<typename std::vector<index_type>::const_iterator>
     ignored_grp_of(const std::size_t i) const noexcept
     {
-        return range<typename std::vector<std::size_t>::const_iterator>{
+        return range<typename std::vector<index_type>::const_iterator>{
             this->ignored_grps_.begin() + this->grp_ranges_[i].first,
             this->ignored_grps_.begin() + this->grp_ranges_[i].second
         };
@@ -281,20 +284,20 @@ class ExclusionList
     // for each group. `grp_ids` contains the index, not std::string itself.
     // It would be changed by calling ExclusionList::make() because it counts
     // groups and and assigns IDs.
-    std::vector<group_id_type>    grp_list_; // list of the group names
-    std::vector<std::size_t>      grp_ids_;  // the index of the above list
+    std::vector<group_id_type> grp_list_; // list of the group names
+    std::vector<index_type>    grp_ids_;  // the index of the above list
 
     // ignored mol_id...
-    std::vector<std::size_t> ignored_mols_;
-    std::vector<std::pair<std::size_t, std::size_t>> mol_ranges_;
+    std::vector<index_type>                        ignored_mols_;
+    std::vector<std::pair<index_type, index_type>> mol_ranges_;
 
     // grp_idx...
-    std::vector<std::size_t> ignored_grps_;
-    std::vector<std::pair<std::size_t, std::size_t>> grp_ranges_;
+    std::vector<index_type>                        ignored_grps_;
+    std::vector<std::pair<index_type, index_type>> grp_ranges_;
 
     // normal particle idx
-    std::vector<std::size_t> ignored_idxs_;
-    std::vector<std::pair<std::size_t, std::size_t>> idx_ranges_;
+    std::vector<index_type>                        ignored_idxs_;
+    std::vector<std::pair<index_type, index_type>> idx_ranges_;
 };
 
 } // mjolnir
