@@ -7,6 +7,7 @@ add_subdirectory(forcefield)
 add_subdirectory(potential)
 if(USE_OPENMP AND OpenMP_CXX_FOUND)
     add_subdirectory(omp)
+    add_subdirectory(omp_nondet)
 endif()
 
 set(mjolnir_source_files ${mjolnir_source_files} ${mjolnir_cpp_files} PARENT_SCOPE)
