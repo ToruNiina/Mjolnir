@@ -12,6 +12,7 @@
 
 #ifdef MJOLNIR_WITH_OPENMP
 #include <mjolnir/omp/omp.hpp>
+#include <mjolnir/omp_nondet/omp_nondet.hpp>
 #endif
 
 #include <memory>
@@ -50,6 +51,19 @@ read_parallelism(const toml::value& root, const toml::value& simulator)
         MJOLNIR_LOG_WARN("Cannot use OpenMP, running with single core.");
         return read_units<SimulatorTraits<realT, boundaryT>>(root, simulator);
 #endif
+    }
+    else if(parallelism.is_string() &&
+            parallelism.as_string() == "NonDeterministicOpenMP")
+    {
+#ifdef MJOLNIR_WITH_OPENMP
+        MJOLNIR_LOG_NOTICE("execute on ", omp_get_max_threads() ," cores with openmp with non-determinisitc algorithm");
+        return read_units<OpenMPNonDeterminisitcSimulatorTraits<realT, boundaryT>>(root, simulator);
+#else
+        MJOLNIR_LOG_WARN("OpenMP flag is set, but OpenMP is not enabled when building.");
+        MJOLNIR_LOG_WARN("Cannot use OpenMP, running with single core.");
+        return read_units<SimulatorTraits<realT, boundaryT>>(root, simulator);
+#endif
+
     }
     else
     {
