@@ -303,17 +303,17 @@ class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<realT, boundar
 
 namespace mjolnir
 {
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<double, UnlimitedBoundary>, DebyeHuckelPotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<float,  UnlimitedBoundary>, DebyeHuckelPotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>, DebyeHuckelPotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>, DebyeHuckelPotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
 
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<double, UnlimitedBoundary>, ExcludedVolumePotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<float,  UnlimitedBoundary>, ExcludedVolumePotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>, ExcludedVolumePotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>, ExcludedVolumePotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
 
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<double, UnlimitedBoundary>, LennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<float,  UnlimitedBoundary>, LennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>, LennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>, LennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
 
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<double, UnlimitedBoundary>, UniformLennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
-extern template class UnlimitedGridCellList<OpenMPNonDeterminisitcSimulatorTraits<float,  UnlimitedBoundary>, UniformLennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>, UniformLennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<double, UnlimitedBoundary>>>;
+extern template class UnlimitedGridCellList<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>, UniformLennardJonesPotential<OpenMPNonDeterministicSimulatorTraits<float,  UnlimitedBoundary>>>;
 }
 #endif // MJOLNIR_SEPARATE_BUILD
 #endif/* MJOLNIR_UNLIMITED_GRID_CELL_LIST */
