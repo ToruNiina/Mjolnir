@@ -94,7 +94,6 @@ class GlobalPairInteraction<
                 const coordinate_type f = rij *
                     (24 * epsilon * (s6l6 - 2 * s6l6 * s6l6) * rcp_l_sq);
 
-                const std::size_t thread_id = omp_get_thread_num();
 #pragma omp atomic
                 math::X(sys.force(i)) += math::X(f);
 #pragma omp atomic
