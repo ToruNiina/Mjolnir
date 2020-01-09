@@ -30,6 +30,7 @@ class RandomNumberGenerator<CUDASimulatorTraits<realT, boundaryT>>
   public:
 
     explicit RandomNumberGenerator(const std::uint32_t seed)
+        : generator_needs_to_be_destroyed_(false)
     {
         MJOLNIR_GET_DEFAULT_LOGGER();
         MJOLNIR_LOG_FUNCTION();
@@ -45,6 +46,7 @@ class RandomNumberGenerator<CUDASimulatorTraits<realT, boundaryT>>
                 curandDestroyGenerator(this->generator_);
                 throw std::runtime_error("curandCreateGenerator failed");
             }
+            this->generator_needs_to_be_destroyed_ = true;
         }
         // set seed.
         //
@@ -69,14 +71,40 @@ class RandomNumberGenerator<CUDASimulatorTraits<realT, boundaryT>>
             }
         }
     }
+
+    RandomNumberGenerator(const RandomNumberGenerator&) = delete;
+    RandomNumberGenerator(RandomNumberGenerator&& other)
+        : generator_needs_to_be_destroyed_(true), seed_(other.seed_),
+          generator_(std::move(other.generator_)), rng_(std::move(other.rng_)),
+          nrm_(std::move(other.nrm_))
+    {
+        other.generator_needs_to_be_destroyed_ = false;
+    }
+    RandomNumberGenerator& operator=(const RandomNumberGenerator&) = delete;
+    RandomNumberGenerator& operator=(RandomNumberGenerator&& other)
+    {
+        other.generator_needs_to_be_destroyed_ = false;
+
+        this->generator_needs_to_be_destroyed_ = true;
+        this->seed_      = other.seed_;
+        this->generator_ = std::move(other.generator_);
+        this->rng_       = std::move(other.rng_);
+        this->nrm_       = std::move(other.nrm_);
+        return *this;
+    }
+
     ~RandomNumberGenerator() noexcept
     {
         MJOLNIR_GET_DEFAULT_LOGGER();
         MJOLNIR_LOG_FUNCTION();
-        const curandStatus_t stat = curandDestroyGenerator(generator_);
-        if(stat != CURAND_STATUS_SUCCESS)
+        if(this->generator_needs_to_be_destroyed_)
         {
-            MJOLNIR_LOG_ERROR("curandDestroyGenerator failed with status ", stat);
+            const curandStatus_t stat = curandDestroyGenerator(generator_);
+            if(stat != CURAND_STATUS_SUCCESS)
+            {
+                MJOLNIR_LOG_ERROR("curandDestroyGenerator failed with status ",
+                                  stat);
+            }
         }
     }
 
@@ -121,6 +149,7 @@ class RandomNumberGenerator<CUDASimulatorTraits<realT, boundaryT>>
 
 
   private:
+    bool generator_needs_to_be_destroyed_;
     std::uint32_t     seed_;
     curandGenerator_t generator_;
     std::mt19937      rng_;
