@@ -96,6 +96,7 @@ endif()
 option(USE_CUDA "use CUDA for GPU parallelization" OFF)
 if(USE_CUDA)
     enable_language(CUDA)
+    find_package(CUDA) # CUDA_curand_LIBRARY
     add_definitions(-DMJOLNIR_WITH_CUDA)
     include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
 endif()
