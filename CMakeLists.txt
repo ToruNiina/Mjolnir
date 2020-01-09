@@ -93,6 +93,12 @@ if(USE_OPENMP)
     endif()
 endif()
 
+option(USE_CUDA "use CUDA for GPU parallelization" OFF)
+if(USE_CUDA)
+    enable_language(CUDA)
+    include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+endif()
+
 option(BUILD_INTEGRATION_TEST "\
 build integration test that does not run automatically \
 because it takes relatively long time" ON)
