@@ -14,4 +14,17 @@
 #  define MJOLNIR_FUNC_NAME __func__
 #endif
 
+// for CUDA. if the compiler is not nvcc, these macros will be expanded to empty
+#ifndef MJOLNIR_CUDA_HOST_DEVICE
+#  ifdef __NVCC__
+#    define MJOLNIR_CUDA_HOST_ONLY   __host__
+#    define MJOLNIR_CUDA_DEVICE_ONLY __device__
+#    define MJOLNIR_CUDA_HOST_DEVICE __host__ __device__
+#  else
+#    define MJOLNIR_CUDA_HOST_ONLY
+#    define MJOLNIR_CUDA_DEVICE_ONLY
+#    define MJOLNIR_CUDA_HOST_DEVICE
+#  endif
+#endif// MJOLNIR_CUDA_HOST_DEVICE
+
 #endif // MJOLNIR_UTIL_MACRO_HPP
