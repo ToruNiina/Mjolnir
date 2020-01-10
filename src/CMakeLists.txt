@@ -26,3 +26,7 @@ if(OpenMP_FOUND AND USE_OPENMP)
 else()
     message(STATUS "Ignoring OpenMP ...")
 endif()
+
+if(USE_CUDA)
+    target_link_libraries(mjolnir mjolnir_cuda ${CUDA_LIBRARIES} ${CUDA_curand_LIBRARY})
+endif()
