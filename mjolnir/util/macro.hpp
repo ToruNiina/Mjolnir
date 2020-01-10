@@ -20,10 +20,12 @@
 #    define MJOLNIR_CUDA_HOST_ONLY   __host__
 #    define MJOLNIR_CUDA_DEVICE_ONLY __device__
 #    define MJOLNIR_CUDA_HOST_DEVICE __host__ __device__
+#    define MJOLNIR_CUDA_FORCEINLINE __forceinline__
 #  else
 #    define MJOLNIR_CUDA_HOST_ONLY
 #    define MJOLNIR_CUDA_DEVICE_ONLY
 #    define MJOLNIR_CUDA_HOST_DEVICE
+#    define MJOLNIR_CUDA_FORCEINLINE
 #  endif
 #endif// MJOLNIR_CUDA_HOST_DEVICE
 
