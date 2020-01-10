@@ -1,6 +1,7 @@
 #ifndef MJOLNIR_CORE_BOUNDARY_CONDITION_HPP
 #define MJOLNIR_CORE_BOUNDARY_CONDITION_HPP
 #include <mjolnir/math/math.hpp>
+#include <mjolnir/util/macro.hpp>
 #include <cstddef>
 
 namespace mjolnir
@@ -17,7 +18,10 @@ struct UnlimitedBoundary
     UnlimitedBoundary() = default;
     ~UnlimitedBoundary() = default;
 
+    MJOLNIR_CUDA_HOST_DEVICE MJOLNIR_CUDA_FORCEINLINE
     coordinate_type adjust_direction(coordinate_type dr) const noexcept {return dr;}
+
+    MJOLNIR_CUDA_HOST_DEVICE MJOLNIR_CUDA_FORCEINLINE
     coordinate_type adjust_position (coordinate_type r ) const noexcept {return r;}
 };
 
@@ -36,6 +40,7 @@ struct CuboidalPeriodicBoundary
     {}
     ~CuboidalPeriodicBoundary() = default;
 
+    MJOLNIR_CUDA_HOST_DEVICE MJOLNIR_CUDA_FORCEINLINE
     coordinate_type adjust_direction(coordinate_type dr) const noexcept
     {
         if     (math::X(dr) < -math::X(halfw_)) {math::X(dr) += math::X(width_);}
@@ -47,6 +52,7 @@ struct CuboidalPeriodicBoundary
         return dr;
     }
 
+    MJOLNIR_CUDA_HOST_DEVICE MJOLNIR_CUDA_FORCEINLINE
     coordinate_type adjust_position(coordinate_type pos) const noexcept
     {
         if     (math::X(pos) <  math::X(lower_)) {math::X(pos) += math::X(width_);}
