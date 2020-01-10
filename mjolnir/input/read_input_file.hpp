@@ -1,6 +1,14 @@
 #ifndef MJOLNIR_INPUT_READ_INPUT_FILE_HPP
 #define MJOLNIR_INPUT_READ_INPUT_FILE_HPP
 #include <extlib/toml/toml.hpp>
+
+#ifdef MJOLNIR_WITH_CUDA
+// this header includes real4 arithmetics and utility function overloads.
+// those should be defined before it would be used in other codes. thus only
+// this header is included here.
+#include <mjolnir/cuda/Vector.hpp>
+#endif
+
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/SimulatorBase.hpp>
 #include <mjolnir/core/SimulatorTraits.hpp>
@@ -10,11 +18,15 @@
 #include <mjolnir/input/read_units.hpp>
 #include <mjolnir/input/read_path.hpp>
 
+#include <memory>
+
 #ifdef MJOLNIR_WITH_OPENMP
 #include <mjolnir/omp/omp.hpp>
 #endif
 
-#include <memory>
+#ifdef MJOLNIR_WITH_CUDA
+#include <mjolnir/cuda/cuda.hpp>
+#endif
 
 namespace mjolnir
 {
@@ -48,6 +60,16 @@ read_parallelism(const toml::value& root, const toml::value& simulator)
 #else
         MJOLNIR_LOG_WARN("OpenMP flag is set, but OpenMP is not enabled when building.");
         MJOLNIR_LOG_WARN("Cannot use OpenMP, running with single core.");
+        return read_units<SimulatorTraits<realT, boundaryT>>(root, simulator);
+#endif
+    }
+    else if(parallelism.is_string() && parallelism.as_string() == "cuda")
+    {
+#ifdef MJOLNIR_WITH_CUDA
+        return read_units<CUDASimulatorTraits<realT, boundaryT>>(root, simulator);
+#else
+        MJOLNIR_LOG_WARN("CUDA is specified, but cuda is not enabled when building.");
+        MJOLNIR_LOG_WARN("Cannot use cuda, running with single CPU core.");
         return read_units<SimulatorTraits<realT, boundaryT>>(root, simulator);
 #endif
     }
