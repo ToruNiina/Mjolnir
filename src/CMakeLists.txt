@@ -13,6 +13,13 @@ if(SEPARATE_BUILD)
     set_target_properties(mjolnir_core PROPERTIES
         COMPILE_FLAGS "${MJOLNIR_WARNING_FLAGS} ${MJOLNIR_OPTIMIZATON_FLAGS}")
     target_link_libraries(mjolnir mjolnir_core)
+
+    if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
+        target_precompile_headers(mjolnir_core
+            PRIVATE "${PROJECT_SOURCE_DIR}/extlib/toml/toml.hpp")
+
+        target_precompile_headers(mjolnir REUSE_FROM mjolnir_core)
+    endif()
 endif()
 
 if(OpenMP_FOUND AND USE_OPENMP)

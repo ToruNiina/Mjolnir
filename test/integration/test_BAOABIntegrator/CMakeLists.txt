@@ -8,6 +8,10 @@ set_target_properties(test_BAOABIntegrator PROPERTIES
 
 if(SEPARATE_BUILD)
     target_link_libraries(test_BAOABIntegrator mjolnir_core)
+
+    if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
+        target_precompile_headers(${TEST_NAME} REUSE_FROM mjolnir_core)
+    endif()
 endif()
 
 if(OpenMP_FOUND AND USE_OPENMP)

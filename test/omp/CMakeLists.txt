@@ -39,6 +39,10 @@ foreach(TEST_NAME ${TEST_NAMES})
 
     if(SEPARATE_BUILD)
         target_link_libraries(${TEST_NAME} mjolnir_core)
+
+        if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
+            target_precompile_headers(${TEST_NAME} REUSE_FROM mjolnir_core)
+        endif()
     endif()
 
     target_link_libraries(${TEST_NAME} ${OpenMP_CXX_LIBRARIES})

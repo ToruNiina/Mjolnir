@@ -124,6 +124,10 @@ foreach(TEST_NAME ${TEST_NAMES})
 
     if(SEPARATE_BUILD)
         target_link_libraries(${TEST_NAME} mjolnir_core)
+
+        if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
+            target_precompile_headers(${TEST_NAME} REUSE_FROM mjolnir_core)
+        endif()
     endif()
     if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
         target_link_libraries(${TEST_NAME} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
