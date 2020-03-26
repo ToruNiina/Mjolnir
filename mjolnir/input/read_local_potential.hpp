@@ -471,6 +471,89 @@ read_local_potentials(const toml::value& local,
     return retval;
 }
 
+template<typename potentialT>
+std::vector<std::pair<std::array<std::size_t, 2>, potentialT>>
+read_multi_local_potential(const toml::value& local)
+{
+    MJOLNIR_GET_DEFAULT_LOGGER();
+    MJOLNIR_LOG_FUNCTION();
+    MJOLNIR_LOG_INFO("as 2-body interaction");
+
+    using indices_t                = std::array<std::size_t, 2>;
+    using indices_potential_pair_t = std::pair<indices_t, potentialT>;
+
+    const auto& params = toml::find<toml::array>(local, "parameters");
+    MJOLNIR_LOG_NOTICE("-- ", params.size(), " interactions are found.");
+
+    const auto& env = local.as_table().count("env") == 1 ?
+                      local.as_table().at("env") : toml::value{};
+
+    std::vector<indices_potential_pair_t> retval;
+    retval.reserve(params.size());
+    for(const auto& item : params)
+    {
+        // Allow several combinations in the Contact Potential. The normal form
+        // is also available.
+        // ```toml
+        // parameters = [
+        // {indices = [[0, 1, 2], [3, 4, 5]], k = 1.0, v0 = 5.0},
+        // {indices = [ 0,         3       ], k = 1.0, v0 = 5.0},
+        // ...
+        // ]
+        // ```
+        // `indices = [[0, 1, 2], [3, 4, 5]]` will be expanded into
+        // ```
+        // indices = [0, 3]
+        // indices = [0, 4]
+        // indices = [0, 5]
+        // indices = [1, 3]
+        // indices = [1, 4]
+        // indices = [1, 5]
+        // indices = [2, 3]
+        // indices = [2, 4]
+        // indices = [2, 5]
+        // ```
+
+        const auto offset = find_parameter_or<std::int64_t>(item, env, "offset", 0);
+
+        const auto indices =
+            find_parameter<std::array<toml::value, 2>>(item, env, "indices");
+
+        std::pair<std::vector<std::size_t>, std::vector<std::size_t>> pairs;
+
+        if(indices.at(0).is_array())
+        {
+            pairs.first = toml::get<std::vector<std::size_t>>(indices.at(0));
+        }
+        else
+        {
+            pairs.first.push_back(toml::get<std::size_t>(indices.at(0)));
+        }
+        if(indices.at(1).is_array())
+        {
+            pairs.second = toml::get<std::vector<std::size_t>>(indices.at(1));
+        }
+        else
+        {
+            pairs.second.push_back(toml::get<std::size_t>(indices.at(1)));
+        }
+
+        const auto pot =
+            detail::read_local_potential_impl<potentialT>::invoke(item, env);
+
+        for(const std::size_t i : pairs.first)
+        {
+            for(const std::size_t j : pairs.second)
+            {
+                const std::array<std::size_t, 2> idxs{{i + offset, j + offset}};
+                MJOLNIR_LOG_INFO("idxs = ", idxs, ", ");
+                retval.emplace_back(idxs, pot);
+            }
+        }
+    }
+    return retval;
+}
+
 #ifdef MJOLNIR_SEPARATE_BUILD
 extern template std::vector<std::pair<std::array<std::size_t, 2>, HarmonicPotential<double>>> read_local_potential(const toml::value& local);
 extern template std::vector<std::pair<std::array<std::size_t, 2>, HarmonicPotential<float >>> read_local_potential(const toml::value& local);

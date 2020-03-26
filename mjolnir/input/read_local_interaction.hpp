@@ -129,7 +129,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         using potentialT = GoContactPotential<real_type>;
 
         return make_unique<ContactInteraction<traitsT, potentialT>>(
-                kind, read_local_potential<2, potentialT>(local), margin);
+                kind, read_multi_local_potential<potentialT>(local), margin);
     }
     else if(potential == "RepulsiveGoContact")
     {
@@ -137,7 +137,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         using potentialT = GoContactRepulsivePotential<real_type>;
 
         return make_unique<ContactInteraction<traitsT, potentialT>>(
-                kind, read_local_potential<2, potentialT>(local), margin);
+                kind, read_multi_local_potential<potentialT>(local), margin);
     }
     else if(potential == "AttractiveGoContact")
     {
@@ -145,7 +145,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         using potentialT = GoContactAttractivePotential<real_type>;
 
         return make_unique<ContactInteraction<traitsT, potentialT>>(
-                kind, read_local_potential<2, potentialT>(local), margin);
+                kind, read_multi_local_potential<potentialT>(local), margin);
     }
     else if(potential == "Gaussian")
     {
@@ -153,7 +153,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         using potentialT = GaussianPotential<real_type>;
 
         return make_unique<ContactInteraction<traitsT, potentialT>>(
-                kind, read_local_potential<2, potentialT>(local), margin);
+                kind, read_multi_local_potential<potentialT>(local), margin);
     }
     else
     {
