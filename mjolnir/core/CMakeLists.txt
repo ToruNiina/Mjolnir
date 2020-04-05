@@ -35,6 +35,7 @@ set(mjolnir_core_cpp_files
     "${CMAKE_CURRENT_SOURCE_DIR}/LocalInteractionBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/GlobalInteractionBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/ExternalForceInteractionBase.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/AxisAlignedPlane.cpp"
     )
 set(mjolnir_cpp_files
     ${mjolnir_cpp_files}

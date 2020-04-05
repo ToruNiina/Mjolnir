@@ -85,20 +85,14 @@ class ZAxis
     static real_type  get_coordinate(coordinate_type const& v) noexcept {return math::Z(v);}
 };
 
-template<typename traitsT>
-using PositiveXDirection = XAxis<traitsT, PositiveDirection>;
-template<typename traitsT>
-using NegativeXDirection = XAxis<traitsT, NegativeDirection>;
+template<typename traitsT> using PositiveXDirection = XAxis<traitsT, PositiveDirection>;
+template<typename traitsT> using NegativeXDirection = XAxis<traitsT, NegativeDirection>;
 
-template<typename traitsT>
-using PositiveYDirection = YAxis<traitsT, PositiveDirection>;
-template<typename traitsT>
-using NegativeYDirection = YAxis<traitsT, NegativeDirection>;
+template<typename traitsT> using PositiveYDirection = YAxis<traitsT, PositiveDirection>;
+template<typename traitsT> using NegativeYDirection = YAxis<traitsT, NegativeDirection>;
 
-template<typename traitsT>
-using PositiveZDirection = ZAxis<traitsT, PositiveDirection>;
-template<typename traitsT>
-using NegativeZDirection = ZAxis<traitsT, NegativeDirection>;
+template<typename traitsT> using PositiveZDirection = ZAxis<traitsT, PositiveDirection>;
+template<typename traitsT> using NegativeZDirection = ZAxis<traitsT, NegativeDirection>;
 
 /*! @brief axis aligned Plane for ExternalDistanceInteraction.                *
  *  @details represents flat Plane. It provides a method to calculate         *
@@ -218,5 +212,51 @@ class AxisAlignedPlane
     std::vector<std::size_t> participant_; // particle that interacts with
 };
 
+template<typename traitsT> using PositiveXAxisAlignedPlane = AxisAlignedPlane<traitsT, XAxis<traitsT, PositiveDirection>>;
+template<typename traitsT> using NegativeXAxisAlignedPlane = AxisAlignedPlane<traitsT, XAxis<traitsT, NegativeDirection>>;
+
+template<typename traitsT> using PositiveYAxisAlignedPlane = AxisAlignedPlane<traitsT, YAxis<traitsT, PositiveDirection>>;
+template<typename traitsT> using NegativeYAxisAlignedPlane = AxisAlignedPlane<traitsT, YAxis<traitsT, NegativeDirection>>;
+
+template<typename traitsT> using PositiveZAxisAlignedPlane = AxisAlignedPlane<traitsT, ZAxis<traitsT, PositiveDirection>>;
+template<typename traitsT> using NegativeZAxisAlignedPlane = AxisAlignedPlane<traitsT, ZAxis<traitsT, NegativeDirection>>;
+
 } // mjolnir
+
+
+#ifdef MJOLNIR_SEPARATE_BUILD
+namespace mjolnir
+{
+extern template class AxisAlignedPlane<SimulatorTraits<double, UnlimitedBoundary>       , XAxis<SimulatorTraits<double, UnlimitedBoundary>       , PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  UnlimitedBoundary>       , XAxis<SimulatorTraits<float,  UnlimitedBoundary>       , PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<double, CuboidalPeriodicBoundary>, XAxis<SimulatorTraits<double, CuboidalPeriodicBoundary>, PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  CuboidalPeriodicBoundary>, XAxis<SimulatorTraits<float,  CuboidalPeriodicBoundary>, PositiveDirection>>;
+
+extern template class AxisAlignedPlane<SimulatorTraits<double, UnlimitedBoundary>       , XAxis<SimulatorTraits<double, UnlimitedBoundary>       , NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  UnlimitedBoundary>       , XAxis<SimulatorTraits<float,  UnlimitedBoundary>       , NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<double, CuboidalPeriodicBoundary>, XAxis<SimulatorTraits<double, CuboidalPeriodicBoundary>, NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  CuboidalPeriodicBoundary>, XAxis<SimulatorTraits<float,  CuboidalPeriodicBoundary>, NegativeDirection>>;
+
+extern template class AxisAlignedPlane<SimulatorTraits<double, UnlimitedBoundary>       , YAxis<SimulatorTraits<double, UnlimitedBoundary>       , PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  UnlimitedBoundary>       , YAxis<SimulatorTraits<float,  UnlimitedBoundary>       , PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<double, CuboidalPeriodicBoundary>, YAxis<SimulatorTraits<double, CuboidalPeriodicBoundary>, PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  CuboidalPeriodicBoundary>, YAxis<SimulatorTraits<float,  CuboidalPeriodicBoundary>, PositiveDirection>>;
+
+extern template class AxisAlignedPlane<SimulatorTraits<double, UnlimitedBoundary>       , YAxis<SimulatorTraits<double, UnlimitedBoundary>       , NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  UnlimitedBoundary>       , YAxis<SimulatorTraits<float,  UnlimitedBoundary>       , NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<double, CuboidalPeriodicBoundary>, YAxis<SimulatorTraits<double, CuboidalPeriodicBoundary>, NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  CuboidalPeriodicBoundary>, YAxis<SimulatorTraits<float,  CuboidalPeriodicBoundary>, NegativeDirection>>;
+
+extern template class AxisAlignedPlane<SimulatorTraits<double, UnlimitedBoundary>       , ZAxis<SimulatorTraits<double, UnlimitedBoundary>       , PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  UnlimitedBoundary>       , ZAxis<SimulatorTraits<float,  UnlimitedBoundary>       , PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<double, CuboidalPeriodicBoundary>, ZAxis<SimulatorTraits<double, CuboidalPeriodicBoundary>, PositiveDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  CuboidalPeriodicBoundary>, ZAxis<SimulatorTraits<float,  CuboidalPeriodicBoundary>, PositiveDirection>>;
+
+extern template class AxisAlignedPlane<SimulatorTraits<double, UnlimitedBoundary>       , ZAxis<SimulatorTraits<double, UnlimitedBoundary>       , NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  UnlimitedBoundary>       , ZAxis<SimulatorTraits<float,  UnlimitedBoundary>       , NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<double, CuboidalPeriodicBoundary>, ZAxis<SimulatorTraits<double, CuboidalPeriodicBoundary>, NegativeDirection>>;
+extern template class AxisAlignedPlane<SimulatorTraits<float,  CuboidalPeriodicBoundary>, ZAxis<SimulatorTraits<float,  CuboidalPeriodicBoundary>, NegativeDirection>>;
+}
+#endif// separate build
+
 #endif // MJOLNIR_AXIS_ALIGNED_PLANE_HPP
