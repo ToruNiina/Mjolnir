@@ -4,7 +4,7 @@
 #include <mjolnir/forcefield/AFMFit/AFMFitInteraction.hpp>
 #include <mjolnir/forcefield/external/ExternalDistanceInteraction.hpp>
 #include <mjolnir/forcefield/external/PositionRestraintInteraction.hpp>
-#include <mjolnir/core/AxisAlignedPlane.hpp>
+#include <mjolnir/forcefield/external/AxisAlignedPlane.hpp>
 #include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/throw_exception.hpp>
 #include <mjolnir/util/logger.hpp>

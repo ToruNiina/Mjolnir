@@ -9,7 +9,7 @@
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/System.hpp>
-#include <mjolnir/core/AxisAlignedPlane.hpp>
+#include <mjolnir/forcefield/external/AxisAlignedPlane.hpp>
 #include <mjolnir/util/make_unique.hpp>
 #include <random>
 #include <cmath>

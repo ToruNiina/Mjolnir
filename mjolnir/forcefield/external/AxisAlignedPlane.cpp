@@ -1,4 +1,4 @@
-#include <mjolnir/core/AxisAlignedPlane.hpp>
+#include <mjolnir/forcefield/external/AxisAlignedPlane.hpp>
 
 #ifndef MJOLNIR_SEPARATE_BUILD
 #error "MJOLNIR_SEPARATE_BUILD flag is required"

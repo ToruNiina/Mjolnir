@@ -124,7 +124,7 @@ ExternalDistanceInteraction<traitsT, potT, spaceT>::calc_energy(
 #ifdef MJOLNIR_SEPARATE_BUILD
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/SimulatorTraits.hpp>
-#include <mjolnir/core/AxisAlignedPlane.hpp>
+#include <mjolnir/forcefield/external/AxisAlignedPlane.hpp>
 #include <mjolnir/forcefield/external/ExcludedVolumeWallPotential.hpp>
 #include <mjolnir/forcefield/external/ImplicitMembranePotential.hpp>
 #include <mjolnir/forcefield/external/LennardJonesWallPotential.hpp>
