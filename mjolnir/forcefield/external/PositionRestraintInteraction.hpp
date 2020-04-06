@@ -138,4 +138,19 @@ PositionRestraintInteraction<traitsT, potT>::calc_energy(
 }
 
 } // mjolnir
+
+#ifdef MJOLNIR_SEPARATE_BUILD
+#include <mjolnir/core/BoundaryCondition.hpp>
+#include <mjolnir/core/SimulatorTraits.hpp>
+#include <mjolnir/forcefield/local/HarmonicPotential.hpp>
+
+namespace mjolnir
+{
+extern template class PositionRestraintInteraction<SimulatorTraits<double, UnlimitedBoundary       >, HarmonicPotential<double>>;
+extern template class PositionRestraintInteraction<SimulatorTraits<float,  UnlimitedBoundary       >, HarmonicPotential<float> >;
+extern template class PositionRestraintInteraction<SimulatorTraits<double, CuboidalPeriodicBoundary>, HarmonicPotential<double>>;
+extern template class PositionRestraintInteraction<SimulatorTraits<float,  CuboidalPeriodicBoundary>, HarmonicPotential<float> >;
+} // mjolnir
+#endif // MJOLNIR_SEPARATE_BUILD
+
 #endif//MJOLNIR_BOX_INTEARACTION_BASE

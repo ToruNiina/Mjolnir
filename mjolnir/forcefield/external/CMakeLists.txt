@@ -4,6 +4,7 @@ set(mjolnir_forcefield_external_cpp_files
     "${CMAKE_CURRENT_SOURCE_DIR}/LennardJonesWallPotential.cpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/ExternalDistanceInteraction.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/PositionRestraintInteraction.cpp"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/AxisAlignedPlane.cpp"
     )
