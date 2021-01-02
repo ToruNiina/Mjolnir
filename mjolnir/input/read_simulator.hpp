@@ -485,6 +485,12 @@ read_integrator_type(const toml::value& root, const toml::value& simulator)
         using integratorT = GJFNVTLangevinIntegrator<traitsT>;
         return read_simulator<traitsT, integratorT>(root, simulator);
     }
+    else if(integ == "G-JFNPTLangevin")
+    {
+        MJOLNIR_LOG_NOTICE("Integrator is G-JF NPT Langevin.");
+        using integratorT = GJFNPTLangevinIntegrator<traitsT>;
+        return read_simulator<traitsT, integratorT>(root, simulator);
+    }
     else
     {
         throw_exception<std::runtime_error>(toml::format_error("[error] "
@@ -496,7 +502,8 @@ read_integrator_type(const toml::value& root, const toml::value& simulator)
                                       " based on the Velocity Verlet",
             "- \"BAOABLangevin\"      : well-known BAOAB Langevin Integrator",
             "- \"g-BAOABLangevin\"    : geodesic BAOAB Langevin Integrator",
-            "- \"G-JFLangevin\"       : Verlet-type Langevin Integrator by G-J&F"
+            "- \"G-JFLangevin\"       : Verlet-type Langevin Integrator by G-J&F",
+            "- \"G-JFNPTLangevin\"    : Verlet-type NPT Langevin Integrator by G-J&F"
             }));
     }
 }
