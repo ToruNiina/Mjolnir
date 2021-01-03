@@ -107,6 +107,9 @@ class GJFNPTLangevinIntegrator
 
     void update(const system_type& sys)
     {
+        MJOLNIR_GET_DEFAULT_LOGGER();
+        MJOLNIR_LOG_FUNCTION();
+
         if(!sys.has_attribute("temperature"))
         {
             throw std::out_of_range("mjolnir::GJFNPTLangevinIntegrator: "
@@ -114,6 +117,18 @@ class GJFNPTLangevinIntegrator
                 "`temperature` is not found in `system.attribute`.");
         }
         this->temperature_ = sys.attribute("temperature");
+
+        if(!sys.has_attribute("pressure"))
+        {
+            throw std::out_of_range("mjolnir::GJFNPTLangevinIntegrator: "
+                "Langevin Integrator requires reference temperature, but "
+                "`temperature` is not found in `system.attribute`.");
+        }
+        this->pressure_ = sys.attribute("pressure");
+
+        MJOLNIR_LOG_INFO("temperature = ", this->temperature_);
+        MJOLNIR_LOG_INFO("pressure    = ", this->pressure_);
+
         this->reset_parameters(sys);
         return;
     }
