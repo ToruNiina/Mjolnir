@@ -121,8 +121,8 @@ class GJFNPTLangevinIntegrator
         if(!sys.has_attribute("pressure"))
         {
             throw std::out_of_range("mjolnir::GJFNPTLangevinIntegrator: "
-                "Langevin Integrator requires reference temperature, but "
-                "`temperature` is not found in `system.attribute`.");
+                "Langevin Integrator requires reference pressure, but "
+                "`pressure` is not found in `system.attribute`.");
         }
         this->pressure_ = sys.attribute("pressure");
 
