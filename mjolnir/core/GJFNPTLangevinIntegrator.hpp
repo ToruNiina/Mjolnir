@@ -45,6 +45,7 @@ class GJFNPTLangevinIntegrator
         MJOLNIR_GET_DEFAULT_LOGGER();
         MJOLNIR_LOG_FUNCTION();
 
+        // assume lower bound is at the origin, to make the calculation simpler
         if( ! is_cuboidal_periodic_boundary<boundary_type>::value ||
             math::X(sys.boundary().lower_bound()) != real_type(0) ||
             math::Y(sys.boundary().lower_bound()) != real_type(0) ||
@@ -92,6 +93,7 @@ class GJFNPTLangevinIntegrator
 
         const auto width = sys.boundary().upper_bound();
         volume_ = math::X(width) * math::Y(width) * math::Z(width);
+        sys.attribute("volume") = volume_;
 
         const auto kBT = physics::constants<real_type>::kB() * this->temperature_;
 
@@ -206,11 +208,17 @@ GJFNPTLangevinIntegrator<traitsT>::step(const real_type time,
         system_type& sys, forcefield_type& ff, rng_type& rng)
 {
     // update volume^(n+1)
-    const auto prev_volume = this->volume_; // volume^(n)
 
-    this->volume_ += box_b_ * dt_ * volume_velocity_ +
-                     box_b_ * dt_ * dt_ * box_1_over_2Q_ * volume_force_ +
-                     box_b_ * dt_ * box_1_over_2Q_ * box_beta_ * rng.gaussian();
+    const auto prev_volume = this->volume_; // volume^(n)
+    const auto box_gauss   = box_beta_ * rng.gaussian();
+    this->volume_ += box_b_ * dt_ * (volume_velocity_ +
+                                     dt_ * box_1_over_2Q_ * volume_force_ +
+                                     box_1_over_2Q_ * box_gauss);
+    this->volume_velocity_ =
+        box_a_ * (volume_velocity_ + dt_ * box_1_over_2Q_ * volume_force_) +
+        box_b_ * box_1_over_2Q_ * 2 * box_gauss;
+
+    sys.attribute("volume") = volume_;
 
     // update position (and velocity, partially)
 
