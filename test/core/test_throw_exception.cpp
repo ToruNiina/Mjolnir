@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(test_empty_message)
         std::string what;
         try
         {
-            mjolnir::throw_exception<std::runtime_error>();
+            mjolnir::throw_exception<std::exception>();
         }
         catch(std::runtime_error const& re)
         {
