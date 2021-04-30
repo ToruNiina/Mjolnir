@@ -10,7 +10,6 @@
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/forcefield/local/GoContactInteraction.hpp>
 #include <mjolnir/math/constants.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <random>
 
 // a test for specialization of ContactInteraction for GoContactPotential.

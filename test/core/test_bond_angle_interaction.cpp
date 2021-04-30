@@ -11,7 +11,6 @@
 #include <mjolnir/forcefield/local/BondAngleInteraction.hpp>
 #include <mjolnir/forcefield/local/HarmonicPotential.hpp>
 #include <mjolnir/math/constants.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 #include <random>
 

@@ -10,7 +10,6 @@
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/forcefield/local/BondLengthInteraction.hpp>
 #include <mjolnir/forcefield/local/HarmonicPotential.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 #include <random>
 

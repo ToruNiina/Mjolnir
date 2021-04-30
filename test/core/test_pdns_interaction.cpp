@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(PDNS_Interaction)
 
     interaction_type interaction(potential_type(potential),
         mjolnir::SpatialPartition<traits_type, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(5, boundary_type{});
     topology_type topol(5);
@@ -307,7 +307,7 @@ BOOST_AUTO_TEST_CASE(PDNS_Interaction_force_and_energy)
 
     interaction_type interaction(potential_type(potential),
         mjolnir::SpatialPartition<traits_type, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(5, boundary_type{});
     topology_type topol(5);

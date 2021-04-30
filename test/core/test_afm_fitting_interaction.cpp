@@ -9,7 +9,6 @@
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/forcefield/AFMFit/AFMFitInteraction.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 #include <random>
 

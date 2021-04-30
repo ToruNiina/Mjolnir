@@ -1,7 +1,6 @@
 #ifndef MJOLNIR_UTIL_LOGGER_HPP
 #define MJOLNIR_UTIL_LOGGER_HPP
 #include <mjolnir/util/macro.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/throw_exception.hpp>
 #include <mjolnir/util/color.hpp>
 #include <mjolnir/util/range.hpp>
@@ -320,7 +319,7 @@ class basic_logger_manager
                       << std::endl;
             return;
         }
-        loggers_.emplace(fname, ::mjolnir::make_unique<logger_type>(fname));
+        loggers_.emplace(fname, std::make_unique<logger_type>(fname));
         return;
     }
 
@@ -343,7 +342,7 @@ class basic_logger_manager
     {
         if(loggers_.count(name) == 0)
         {
-            loggers_.emplace(name, make_unique<logger_type>(name));
+            loggers_.emplace(name, std::make_unique<logger_type>(name));
         }
         return *(loggers_.at(name));
     }

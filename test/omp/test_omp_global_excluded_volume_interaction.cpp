@@ -13,7 +13,6 @@
 #include <mjolnir/omp/RandomNumberGenerator.hpp>
 #include <mjolnir/omp/UnlimitedGridCellList.hpp>
 #include <mjolnir/omp/GlobalPairExcludedVolumeInteraction.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 BOOST_AUTO_TEST_CASE(omp_GlobalPair_UniformLennardJones_calc_force)
 {
@@ -109,10 +108,10 @@ BOOST_AUTO_TEST_CASE(omp_GlobalPair_UniformLennardJones_calc_force)
 
         interaction_type interaction(std::move(potential),
             mjolnir::SpatialPartition<traits_type, potential_type>(
-                mjolnir::make_unique<partition_type>()));
+                std::make_unique<partition_type>()));
         sequencial_interaction_type seq_interaction(std::move(seq_potential),
             mjolnir::SpatialPartition<sequencial_traits_type, sequencial_potential_type>(
-                mjolnir::make_unique<sequencial_partition_type>()));
+                std::make_unique<sequencial_partition_type>()));
 
         interaction    .initialize(sys, topol);
         seq_interaction.initialize(seq_sys, topol);
@@ -206,7 +205,7 @@ BOOST_AUTO_TEST_CASE(omp_GlobalPair_UniformLennardJones_calc_force_and_energy)
 
         interaction_type interaction(std::move(potential),
             mjolnir::SpatialPartition<traits_type, potential_type>(
-                mjolnir::make_unique<partition_type>()));
+                std::make_unique<partition_type>()));
 
         interaction.initialize(sys, topol);
 

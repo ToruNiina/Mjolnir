@@ -10,7 +10,6 @@
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/forcefield/local/BondLengthGoContactInteraction.hpp>
 #include <mjolnir/math/constants.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <random>
 
 BOOST_AUTO_TEST_CASE(BondLengthGoContactInteraction)

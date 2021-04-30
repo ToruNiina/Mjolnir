@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_ZorderRTree_full_interaction, traits_type, tr
     topol.construct_molecules();
 
     mjolnir::SpatialPartition<traits_type, potential_type> vlist(
-        mjolnir::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(margin));
+        std::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(margin));
     using neighbor_type = typename decltype(vlist)::neighbor_type;
 
     BOOST_TEST(!vlist.valid());
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_ZorderRTree_partial_interaction, traits_type,
     topol.construct_molecules();
 
     mjolnir::SpatialPartition<traits_type, potential_type> vlist(
-        mjolnir::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(margin));
+        std::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(margin));
 
     using neighbor_type = typename decltype(vlist)::neighbor_type;
 
@@ -313,7 +313,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_ZorderRTree_partial_interaction_incontiguous,
     topol.construct_molecules();
 
     mjolnir::SpatialPartition<traits_type, potential_type> vlist(
-            mjolnir::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(margin));
+            std::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(margin));
 
     using neighbor_type = typename decltype(vlist)::neighbor_type;
 
@@ -377,7 +377,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_ZorderRTree_clone, traits_type, traits_to_be_
     using potential_type  = dummy_potential<real_type>;
 
     mjolnir::SpatialPartition<traits_type, potential_type> vlist(
-        mjolnir::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(1.0));
+        std::make_unique<mjolnir::ZorderRTree<traits_type, potential_type>>(1.0));
 
     mjolnir::SpatialPartition<traits_type, potential_type> vlist2(vlist);
 

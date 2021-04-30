@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(PWMcos_Interaction)
 
     interaction_type interaction(potential_type(potential),
         mjolnir::SpatialPartition<traits_type, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(7, boundary_type{});
     topology_type topol(7);
@@ -327,7 +327,7 @@ BOOST_AUTO_TEST_CASE(PWMcos_Interaction_force_and_energy)
 
     interaction_type interaction(potential_type(potential),
         mjolnir::SpatialPartition<traits_type, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(7, boundary_type{});
     topology_type topol(7);

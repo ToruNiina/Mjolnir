@@ -8,7 +8,6 @@
 #include <mjolnir/forcefield/3SPN2/ThreeSPN2BaseBaseInteraction.hpp>
 #include <mjolnir/forcefield/PDNS/ProteinDNANonSpecificInteraction.hpp>
 #include <mjolnir/forcefield/PWMcos/PWMcosInteraction.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/throw_exception.hpp>
 #include <mjolnir/util/logger.hpp>
 #include <mjolnir/input/read_global_potential.hpp>
@@ -37,7 +36,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = ExcludedVolumePotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_excluded_volume_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -47,7 +46,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = InversePowerPotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_inverse_power_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -57,7 +56,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = HardCoreExcludedVolumePotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_hard_core_excluded_volume_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -67,7 +66,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = DebyeHuckelPotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_debye_huckel_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -77,7 +76,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = LennardJonesPotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_lennard_jones_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -87,7 +86,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = UniformLennardJonesPotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_uniform_lennard_jones_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -97,7 +96,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = LennardJonesAttractivePotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_lennard_jones_attractive_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -107,7 +106,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = WCAPotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_wca_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -117,7 +116,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = ThreeSPN2ExcludedVolumePotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_3spn2_excluded_volume_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -127,7 +126,7 @@ read_global_pair_interaction(const toml::value& global)
         using potential_t   = iSoLFAttractivePotential<traitsT>;
         using interaction_t = GlobalPairInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(
+        return std::make_unique<interaction_t>(
             read_isolf_potential<traitsT>(global),
             read_spatial_partition<traitsT, potential_t>(global));
     }
@@ -259,7 +258,7 @@ read_global_3spn2_base_base_interaction(const toml::value& global)
             read_ignore_particles_within(global),
             read_ignored_molecule(global), read_ignored_group(global));
 
-        return make_unique<ThreeSPN2BaseBaseInteraction<traitsT>>(
+        return std::make_unique<ThreeSPN2BaseBaseInteraction<traitsT>>(
                 std::move(potential),
                 read_spatial_partition<traitsT, potential_type>(global));
     }
@@ -270,7 +269,7 @@ read_global_3spn2_base_base_interaction(const toml::value& global)
             read_ignore_particles_within(global),
             read_ignored_molecule(global), read_ignored_group(global));
 
-        return make_unique<ThreeSPN2BaseBaseInteraction<traitsT>>(
+        return std::make_unique<ThreeSPN2BaseBaseInteraction<traitsT>>(
                 std::move(potential),
                 read_spatial_partition<traitsT, potential_type>(global));
     }
@@ -378,7 +377,7 @@ read_pdns_interaction(const toml::value& global)
                 }));
         }
     }
-    return make_unique<ProteinDNANonSpecificInteraction<traitsT>>(
+    return std::make_unique<ProteinDNANonSpecificInteraction<traitsT>>(
         potential_type(sgm, dlt, cutoff, std::move(contacts), std::move(dnas),
             read_ignore_particles_within(global), read_ignored_molecule(global),
             read_ignored_group(global)),
@@ -516,7 +515,7 @@ read_pwmcos_interaction(const toml::value& global)
                 }));
         }
     }
-    return make_unique<PWMcosInteraction<traitsT>>(
+    return std::make_unique<PWMcosInteraction<traitsT>>(
         potential_type(sgm, phi, Eunit, Eshift, cutoff,
             std::move(contacts), std::move(dnas),
             read_ignore_particles_within(global), read_ignored_molecule(global),

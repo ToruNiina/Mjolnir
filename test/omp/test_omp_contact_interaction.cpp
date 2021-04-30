@@ -13,7 +13,6 @@
 #include <mjolnir/omp/System.hpp>
 #include <mjolnir/omp/RandomNumberGenerator.hpp>
 #include <mjolnir/omp/ContactInteraction.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 BOOST_AUTO_TEST_CASE(omp_Contact_calc_force)
 {

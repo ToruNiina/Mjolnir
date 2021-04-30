@@ -14,7 +14,6 @@
 #include <mjolnir/forcefield/iSoLF/iSoLFAttractivePotential.hpp>
 #include <mjolnir/core/Topology.hpp>
 #include <mjolnir/util/string.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/logger.hpp>
 
 namespace mjolnir
@@ -39,7 +38,7 @@ read_ignored_molecule(const toml::value& global)
                            "All the molecules are taken into account.");
 
         return IgnoreMolecule<typename Topology::molecule_id_type>{
-            make_unique<IgnoreNothing<typename Topology::molecule_id_type>>()
+            std::make_unique<IgnoreNothing<typename Topology::molecule_id_type>>()
         };
     }
 
@@ -52,7 +51,7 @@ read_ignored_molecule(const toml::value& global)
                            "All the groups are taken into account.");
 
         return IgnoreMolecule<typename Topology::molecule_id_type>{
-            make_unique<IgnoreNothing<typename Topology::molecule_id_type>>()
+            std::make_unique<IgnoreNothing<typename Topology::molecule_id_type>>()
         };
     }
 
@@ -63,21 +62,21 @@ read_ignored_molecule(const toml::value& global)
         MJOLNIR_LOG_NOTICE("all the interactions"
                            "(both (inter|intra)-molecule) are included");
         return IgnoreMolecule<typename Topology::molecule_id_type>{
-            make_unique<IgnoreNothing<typename Topology::molecule_id_type>>()
+            std::make_unique<IgnoreNothing<typename Topology::molecule_id_type>>()
         };
     }
     else if(name == "Self" || name == "Intra")
     {
         MJOLNIR_LOG_NOTICE("intra-molecule interaction is ignored");
         return IgnoreMolecule<typename Topology::molecule_id_type>{
-            make_unique<IgnoreSelf<typename Topology::molecule_id_type>>()
+            std::make_unique<IgnoreSelf<typename Topology::molecule_id_type>>()
         };
     }
     else if(name == "Others" || name == "Inter")
     {
         MJOLNIR_LOG_NOTICE("inter-molecule interaction is ignored");
         return IgnoreMolecule<typename Topology::molecule_id_type>{
-            make_unique<IgnoreOthers<typename Topology::molecule_id_type>>()
+            std::make_unique<IgnoreOthers<typename Topology::molecule_id_type>>()
         };
     }
     else

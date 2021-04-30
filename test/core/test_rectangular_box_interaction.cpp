@@ -10,7 +10,6 @@
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/forcefield/external/RectangularBoxInteraction.hpp>
 #include <mjolnir/forcefield/external/ExcludedVolumeWallPotential.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <random>
 
 BOOST_AUTO_TEST_CASE(PositionRestraint_Harmonic)

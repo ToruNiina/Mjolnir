@@ -11,7 +11,6 @@
 #include <mjolnir/core/NaivePairCalculation.hpp>
 #include <mjolnir/forcefield/global/GlobalPairInteraction.hpp>
 #include <mjolnir/forcefield/global/LennardJonesPotential.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <random>
 
 BOOST_AUTO_TEST_CASE(GlobalPairInteraction_double)
@@ -42,7 +41,7 @@ BOOST_AUTO_TEST_CASE(GlobalPairInteraction_double)
 
     interaction_type interaction(potential_type{potential},
         mjolnir::SpatialPartition<traits, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     const real_type eq_dist = 1.0 * std::pow(2.0, 1.0 / 6.0);
 
@@ -154,7 +153,7 @@ BOOST_AUTO_TEST_CASE(GlobalPairInteraction_numeric_limits)
 
     interaction_type interaction(potential_type{potential},
         mjolnir::SpatialPartition<traits, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(2, boundary_type{});
     topology_type topol(2);
@@ -312,7 +311,7 @@ BOOST_AUTO_TEST_CASE(GlobalPairInteraction_force_and_energy)
 
     interaction_type interaction(potential_type{potential},
         mjolnir::SpatialPartition<traits, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(2, boundary_type{});
     topology_type topol(2);

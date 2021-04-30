@@ -11,7 +11,6 @@
 #include <mjolnir/forcefield/3SPN2/ThreeSPN2BaseStackingPotential.hpp>
 #include <mjolnir/forcefield/3SPN2/ThreeSPN2BaseStackingInteraction.hpp>
 
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/throw_exception.hpp>
 #include <mjolnir/util/logger.hpp>
 #include <mjolnir/input/read_local_potential.hpp>
@@ -40,7 +39,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Harmonic.");
         using potentialT = HarmonicPotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else if(potential == "GoContact")
@@ -48,7 +47,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is 10-12 Go contact.");
         using potentialT = GoContactPotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else if(potential == "RepulsiveGoContact")
@@ -56,7 +55,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Repulsive Go contact.");
         using potentialT = GoContactRepulsivePotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else if(potential == "AttractiveGoContact")
@@ -64,7 +63,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Attractive Go contact.");
         using potentialT = GoContactAttractivePotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else if(potential == "Gaussian")
@@ -72,7 +71,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Gaussian.");
         using potentialT = GaussianPotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else if(potential == "WormLikeChain")
@@ -80,7 +79,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is WormLikeChainPotential.");
         using potentialT = WormLikeChainPotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else if(potential == "WormLikeChainOffset")
@@ -88,7 +87,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is WormLikeChainOffsetPotential");
         using potentialT = WormLikeChainOffsetPotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else if(potential == "3SPN2Bond")
@@ -96,7 +95,7 @@ read_bond_length_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is 3SPN2Bond.");
         using potentialT = ThreeSPN2BondPotential<real_type>;
 
-        return make_unique<BondLengthInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondLengthInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local));
     }
     else
@@ -137,7 +136,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is 10-12 Go contact.");
         using potentialT = GoContactPotential<real_type>;
 
-        return make_unique<ContactInteraction<traitsT, potentialT>>(
+        return std::make_unique<ContactInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local), margin);
     }
     else if(potential == "RepulsiveGoContact")
@@ -145,7 +144,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Repulsive Go contact.");
         using potentialT = GoContactRepulsivePotential<real_type>;
 
-        return make_unique<ContactInteraction<traitsT, potentialT>>(
+        return std::make_unique<ContactInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local), margin);
     }
     else if(potential == "AttractiveGoContact")
@@ -153,7 +152,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Attractive Go contact.");
         using potentialT = GoContactAttractivePotential<real_type>;
 
-        return make_unique<ContactInteraction<traitsT, potentialT>>(
+        return std::make_unique<ContactInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local), margin);
     }
     else if(potential == "Gaussian")
@@ -161,7 +160,7 @@ read_contact_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Gaussian.");
         using potentialT = GaussianPotential<real_type>;
 
-        return make_unique<ContactInteraction<traitsT, potentialT>>(
+        return std::make_unique<ContactInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<2, potentialT>(local), margin);
     }
     else
@@ -192,7 +191,7 @@ read_bond_angle_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Harmonic.");
         using potentialT = HarmonicPotential<real_type>;
 
-        return make_unique<BondAngleInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondAngleInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<3, potentialT>(local));
     }
     else if(potential == "FlexibleLocalAngle")
@@ -200,7 +199,7 @@ read_bond_angle_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Flexible Local Angle.");
         using potentialT = FlexibleLocalAnglePotential<real_type>;
 
-        return make_unique<BondAngleInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondAngleInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<3, potentialT>(local));
     }
     else if(potential == "Gaussian")
@@ -208,7 +207,7 @@ read_bond_angle_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_NOTICE("-- potential function is Gaussian.");
         using potentialT = GaussianPotential<real_type>;
 
-        return make_unique<BondAngleInteraction<traitsT, potentialT>>(
+        return std::make_unique<BondAngleInteraction<traitsT, potentialT>>(
                 kind, read_local_potential<3, potentialT>(local));
     }
     else
@@ -239,7 +238,7 @@ read_dihedral_angle_interaction(const std::string& kind, const toml::value& loca
         MJOLNIR_LOG_NOTICE("-- potential function is Clementi-Go's dihedral.");
         using potentialT = ClementiDihedralPotential<real_type>;
 
-        return make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
+        return std::make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
             kind, read_local_potential<4, potentialT>(local));
     }
     else if(potential == "Gaussian")
@@ -247,7 +246,7 @@ read_dihedral_angle_interaction(const std::string& kind, const toml::value& loca
         MJOLNIR_LOG_NOTICE("-- potential function is Gaussian.");
         using potentialT = PeriodicGaussianPotential<real_type>;
 
-        return make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
+        return std::make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
             kind, read_local_potential<4, potentialT>(local));
     }
     else if(potential == "FlexibleLocalDihedral")
@@ -255,7 +254,7 @@ read_dihedral_angle_interaction(const std::string& kind, const toml::value& loca
         MJOLNIR_LOG_NOTICE("-- potential function is Flexible Local Dihedral.");
         using potentialT = FlexibleLocalDihedralPotential<real_type>;
 
-        return make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
+        return std::make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
             kind, read_local_potential<4, potentialT>(local));
     }
     else if(potential == "Cosine")
@@ -263,7 +262,7 @@ read_dihedral_angle_interaction(const std::string& kind, const toml::value& loca
         MJOLNIR_LOG_NOTICE("-- potential function is Cosine.");
         using potentialT = CosinePotential<real_type>;
 
-        return make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
+        return std::make_unique<DihedralAngleInteraction<traitsT, potentialT>>(
             kind, read_local_potential<4, potentialT>(local));
     }
     else if(potential == "Gaussian+FlexibleLocalDihedral" ||
@@ -274,7 +273,7 @@ read_dihedral_angle_interaction(const std::string& kind, const toml::value& loca
         using potentialT = SumLocalPotential<real_type,
               PeriodicGaussianPotential, FlexibleLocalDihedralPotential>;
 
-        return make_unique<DihedralAngleInteraction<traitsT, potentialT>>(kind,
+        return std::make_unique<DihedralAngleInteraction<traitsT, potentialT>>(kind,
             read_local_potentials<4, real_type,
                 PeriodicGaussianPotential, FlexibleLocalDihedralPotential
                 >(local, "Gaussian", "FlexibleLocalDihedral"));
@@ -285,7 +284,7 @@ read_dihedral_angle_interaction(const std::string& kind, const toml::value& loca
         using potentialT = SumLocalPotential<real_type,
               PeriodicGaussianPotential, CosinePotential>;
 
-        return make_unique<DihedralAngleInteraction<traitsT, potentialT>>(kind,
+        return std::make_unique<DihedralAngleInteraction<traitsT, potentialT>>(kind,
             read_local_potentials<
                 4, real_type, PeriodicGaussianPotential, CosinePotential
                 >(local, "Gaussian", "Cosine"));
@@ -350,7 +349,7 @@ read_dummy_interaction(const std::string& kind, const toml::value& local)
         MJOLNIR_LOG_INFO("idxs = ", indices);
         indices_list.push_back(indices);
     }
-    return make_unique<DummyInteraction<traitsT>>(kind, std::move(indices_list));
+    return std::make_unique<DummyInteraction<traitsT>>(kind, std::move(indices_list));
 }
 
 template<typename traitsT>
@@ -474,7 +473,7 @@ read_3spn2_base_stacking_interaction(const std::string& kind, const toml::value&
 
         parameters.emplace_back(idxs, bs_kind);
     }
-    return make_unique<ThreeSPN2BaseStackingInteraction<traitsT>>(kind,
+    return std::make_unique<ThreeSPN2BaseStackingInteraction<traitsT>>(kind,
             std::move(parameters), std::move(potential), std::move(nuc_idxs));
 }
 
@@ -536,7 +535,7 @@ read_directional_contact_interaction(const std::string& kind,
         MJOLNIR_LOG_NOTICE("-- contact potential function is 10-12 Go contact.");
         using contact_potentialT = GoContactPotential<real_type>;
 
-        return make_unique<DirectionalContactInteraction<
+        return std::make_unique<DirectionalContactInteraction<
             traitsT, PotentialTs..., contact_potentialT>>(kind,
               read_directional_contact_potentials<
                   real_type, PotentialTs..., contact_potentialT
@@ -547,7 +546,7 @@ read_directional_contact_interaction(const std::string& kind,
         MJOLNIR_LOG_NOTICE("-- contact potential function is Gaussian.");
         using contact_potentialT = GaussianPotential<real_type>;
 
-        return make_unique<DirectionalContactInteraction<
+        return std::make_unique<DirectionalContactInteraction<
                 traitsT, PotentialTs..., contact_potentialT>>(kind,
               read_directional_contact_potentials<
                   real_type, PotentialTs..., contact_potentialT
@@ -558,7 +557,7 @@ read_directional_contact_interaction(const std::string& kind,
         MJOLNIR_LOG_NOTICE("-- contact potential function is Uniform potential");
         using contact_potentialT = UniformPotential<real_type>;
 
-        return make_unique<DirectionalContactInteraction<
+        return std::make_unique<DirectionalContactInteraction<
                 traitsT, PotentialTs..., contact_potentialT>>(kind,
               read_directional_contact_potentials<
                   real_type, PotentialTs..., contact_potentialT

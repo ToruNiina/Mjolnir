@@ -11,7 +11,6 @@
 #include <mjolnir/forcefield/local/DihedralAngleInteraction.hpp>
 #include <mjolnir/math/constants.hpp>
 #include <mjolnir/forcefield/local/ClementiDihedralPotential.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 #include <random>
 

@@ -6,7 +6,6 @@
 #include <mjolnir/core/SimulatedAnnealingSimulator.hpp>
 #include <mjolnir/core/SwitchingForceFieldSimulator.hpp>
 #include <mjolnir/core/EnergyCalculationSimulator.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/throw_exception.hpp>
 #include <mjolnir/util/logger.hpp>
 #include <mjolnir/input/read_system.hpp>
@@ -45,7 +44,7 @@ read_molecular_dynamics_simulator(
     auto rng  = read_rng       <traitsT>(simulator);
     auto intg = read_integrator<integratorT>(simulator);
 
-    return make_unique<MolecularDynamicsSimulator<traitsT, integratorT>>(
+    return std::make_unique<MolecularDynamicsSimulator<traitsT, integratorT>>(
             tstep, sstep, cstep, std::move(sys), std::move(ff), std::move(intg),
             std::move(obs), std::move(rng));
 }
@@ -75,7 +74,7 @@ read_steepest_descent_simulator(
     MJOLNIR_LOG_NOTICE("delta      is ", delta);
     MJOLNIR_LOG_NOTICE("threshold  is ", threshold);
 
-    return make_unique<simulator_type>(delta, threshold, step_lim,
+    return std::make_unique<simulator_type>(delta, threshold, step_lim,
             save_step, chkp_step,
             read_system<traitsT>(root, 0),
             read_forcefield<traitsT>(root, simulator),
@@ -146,7 +145,7 @@ read_simulated_annealing_simulator(
         MJOLNIR_LOG_NOTICE("temparing schedule is linear.");
         auto sch = LinearScheduler<real_type>(schedule_begin, schedule_end);
 
-        return make_unique<
+        return std::make_unique<
             SimulatedAnnealingSimulator<traitsT, integratorT, LinearScheduler>>(
                 tstep, sstep, cstep, each_step, std::move(sch),  std::move(sys),
                 std::move(ff), std::move(intg), std::move(obs), std::move(rng));
@@ -242,7 +241,7 @@ read_switching_forcefield_simulator(
         }
     }
 
-    return make_unique<SwitchingForceFieldSimulator<traitsT, integratorT>>(
+    return std::make_unique<SwitchingForceFieldSimulator<traitsT, integratorT>>(
             tstep, sstep, cstep, std::move(sys), std::move(ffs), std::move(intg),
             std::move(obs), std::move(rng), std::move(ffidx), std::move(sch));
 }
@@ -276,7 +275,7 @@ read_energy_calculation_simulator(
 
     // push EnergyObserver to the observer.
     ObserverContainer<traitsT> obs(progress_bar_enabled);
-    obs.push_back(make_unique<EnergyObserver<traitsT>>(output_name));
+    obs.push_back(std::make_unique<EnergyObserver<traitsT>>(output_name));
 
     // ------------------------------------------------------------------------
     // read filename, set-up Loader
@@ -286,15 +285,15 @@ read_energy_calculation_simulator(
 
     if(input_file.substr(input_file.size()-4, 4) == ".xyz")
     {
-        loader = make_unique<XYZLoader<traitsT>>(input_file);
+        loader = std::make_unique<XYZLoader<traitsT>>(input_file);
     }
     else if(input_file.substr(input_file.size()-4, 4) == ".dcd")
     {
-        loader = make_unique<DCDLoader<traitsT>>(input_file);
+        loader = std::make_unique<DCDLoader<traitsT>>(input_file);
     }
     else if(input_file.substr(input_file.size()-4, 4) == ".trr")
     {
-        loader = make_unique<TRRLoader<traitsT>>(input_file);
+        loader = std::make_unique<TRRLoader<traitsT>>(input_file);
     }
     else
     {
@@ -410,7 +409,7 @@ read_energy_calculation_simulator(
 
     auto ff = read_forcefield<traitsT>(root, simulator);
 
-    return make_unique<EnergyCalculationSimulator<traitsT>>(loader->num_frames(),
+    return std::make_unique<EnergyCalculationSimulator<traitsT>>(loader->num_frames(),
             std::move(loader), std::move(sys), std::move(ff), std::move(obs));
 }
 

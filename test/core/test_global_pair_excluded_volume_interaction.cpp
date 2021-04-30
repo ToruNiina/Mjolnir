@@ -10,7 +10,6 @@
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/NaivePairCalculation.hpp>
 #include <mjolnir/forcefield/global/GlobalPairExcludedVolumeInteraction.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <random>
 
 BOOST_AUTO_TEST_CASE(GlobalPairExcludedVolumeInteraction_numeric_limits)
@@ -39,7 +38,7 @@ BOOST_AUTO_TEST_CASE(GlobalPairExcludedVolumeInteraction_numeric_limits)
 
     interaction_type interaction(potential_type{potential},
         mjolnir::SpatialPartition<traits, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(2, boundary_type{});
     topology_type topol(2);
@@ -196,7 +195,7 @@ BOOST_AUTO_TEST_CASE(GlobalPairExcludedVolumeInteraction_numeric_force_and_energ
 
     interaction_type interaction(potential_type{potential},
         mjolnir::SpatialPartition<traits, potential_type>(
-            mjolnir::make_unique<partition_type>()));
+            std::make_unique<partition_type>()));
 
     system_type sys(2, boundary_type{});
     topology_type topol(2);

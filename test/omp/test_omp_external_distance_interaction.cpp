@@ -15,7 +15,6 @@
 #include <mjolnir/omp/RandomNumberGenerator.hpp>
 #include <mjolnir/omp/UnlimitedGridCellList.hpp>
 #include <mjolnir/omp/ExternalDistanceInteraction.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 BOOST_AUTO_TEST_CASE(omp_ExternalDistacne_calc_force)
 {

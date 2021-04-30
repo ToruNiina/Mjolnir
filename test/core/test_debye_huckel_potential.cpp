@@ -9,7 +9,6 @@
 #include <mjolnir/forcefield/global/DebyeHuckelPotential.hpp>
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/SimulatorTraits.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/logger.hpp>
 
 BOOST_AUTO_TEST_CASE(DH_double)

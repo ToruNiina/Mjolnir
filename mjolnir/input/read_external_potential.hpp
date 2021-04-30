@@ -7,7 +7,6 @@
 #include <mjolnir/forcefield/external/ExcludedVolumeWallPotential.hpp>
 #include <mjolnir/core/Topology.hpp>
 #include <mjolnir/util/string.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/logger.hpp>
 
 namespace mjolnir

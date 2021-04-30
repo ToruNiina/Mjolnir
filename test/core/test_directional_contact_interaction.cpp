@@ -11,7 +11,6 @@
 #include <mjolnir/forcefield/local/DirectionalContactInteraction.hpp>
 #include <mjolnir/forcefield/local/CosinePotential.hpp>
 #include <mjolnir/forcefield/local/GoContactPotential.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/math/constants.hpp>
 #include <mjolnir/math/Matrix.hpp>
 

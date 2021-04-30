@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(test_CellList_PeriodicBoundary)
     }
     topol.construct_molecules();
 
-    mjolnir::SpatialPartition<traits_type, potential_type> vlist(mjolnir::make_unique<
+    mjolnir::SpatialPartition<traits_type, potential_type> vlist(std::make_unique<
             mjolnir::PeriodicGridCellList<traits_type, potential_type>>(margin));
     using neighbor_type = typename decltype(vlist)::neighbor_type;
 
@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE(test_PeriodicGridCellList_partial)
     }
     topol.construct_molecules();
 
-    mjolnir::SpatialPartition<traits_type, potential_type> vlist(mjolnir::make_unique<
+    mjolnir::SpatialPartition<traits_type, potential_type> vlist(std::make_unique<
             mjolnir::PeriodicGridCellList<traits_type, potential_type>>(margin));
 
     using neighbor_type = typename decltype(vlist)::neighbor_type;
@@ -293,7 +293,7 @@ BOOST_AUTO_TEST_CASE(test_PeriodicGridCellList_partial_2)
     }
     topol.construct_molecules();
 
-    mjolnir::SpatialPartition<traits_type, potential_type> vlist(mjolnir::make_unique<
+    mjolnir::SpatialPartition<traits_type, potential_type> vlist(std::make_unique<
             mjolnir::PeriodicGridCellList<traits_type, potential_type>>(margin));
 
     using neighbor_type = typename decltype(vlist)::neighbor_type;
@@ -358,7 +358,7 @@ BOOST_AUTO_TEST_CASE(test_PeriodicGridCellList_clone)
     using real_type       = typename traits_type::real_type;
     using potential_type  = dummy_potential<real_type>;
 
-    mjolnir::SpatialPartition<traits_type, potential_type> vlist(mjolnir::make_unique<
+    mjolnir::SpatialPartition<traits_type, potential_type> vlist(std::make_unique<
             mjolnir::PeriodicGridCellList<traits_type, potential_type>>(10.0));
 
     mjolnir::SpatialPartition<traits_type, potential_type> vlist2(vlist);

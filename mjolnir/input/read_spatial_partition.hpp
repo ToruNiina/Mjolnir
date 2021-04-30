@@ -8,7 +8,6 @@
 #include <mjolnir/core/NaivePairCalculation.hpp>
 #include <mjolnir/core/VerletList.hpp>
 #include <mjolnir/core/ZorderRTree.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/logger.hpp>
 
 namespace mjolnir
@@ -33,7 +32,7 @@ struct celllist_dispatcher<UnlimitedBoundary<realT, coordT>>
     static std::unique_ptr<UnlimitedGridCellList<traitsT, potentialT>>
     invoke(const real_type margin)
     {
-        return make_unique<UnlimitedGridCellList<traitsT, potentialT>>(margin);
+        return std::make_unique<UnlimitedGridCellList<traitsT, potentialT>>(margin);
     }
 };
 
@@ -47,7 +46,7 @@ struct celllist_dispatcher<CuboidalPeriodicBoundary<realT, coordT>>
     static std::unique_ptr<PeriodicGridCellList<traitsT, potentialT>>
     invoke(const real_type margin)
     {
-        return make_unique<PeriodicGridCellList<traitsT, potentialT>>(margin);
+        return std::make_unique<PeriodicGridCellList<traitsT, potentialT>>(margin);
     }
 };
 
@@ -85,7 +84,7 @@ read_spatial_partition(const toml::value& global)
                            "with relative margin = ", margin);
 
         return SpatialPartition<traitsT, potentialT>(
-                make_unique<ZorderRTree<traitsT, potentialT>>(margin));
+                std::make_unique<ZorderRTree<traitsT, potentialT>>(margin));
     }
 
     else if(type == "VerletList")
@@ -97,7 +96,7 @@ read_spatial_partition(const toml::value& global)
                            "with relative margin = ", margin);
 
         return SpatialPartition<traitsT, potentialT>(
-                make_unique<verlet_list_type>(margin));
+                std::make_unique<verlet_list_type>(margin));
     }
     else if(type == "Naive")
     {
@@ -105,7 +104,7 @@ read_spatial_partition(const toml::value& global)
                            "Calculate all the possible pairs.");
 
         return SpatialPartition<traitsT, potentialT>(
-                make_unique<NaivePairCalculation<traitsT, potentialT>>());
+                std::make_unique<NaivePairCalculation<traitsT, potentialT>>());
     }
     else
     {

@@ -7,7 +7,6 @@
 #endif
 
 #include <mjolnir/math/constants.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/core/VerletList.hpp>
@@ -117,7 +116,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ThreeSPN2BasePairIntearction_numerical_diff,
 
         interaction_type interaction(potential_type(potential),
             mjolnir::SpatialPartition<traits_type, potential_type>(
-                mjolnir::make_unique<partition_type>()));
+                std::make_unique<partition_type>()));
 
         system_type sys(4, boundary_type{});
         topology_type topol(4);
@@ -432,7 +431,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ThreeSPN2CrossStackingIntearction_numerical_diff,
 
         interaction_type interaction(potential_type(potential),
             mjolnir::SpatialPartition<traits_type, potential_type>(
-                mjolnir::make_unique<partition_type>()));
+                std::make_unique<partition_type>()));
 
         system_type sys(10, boundary_type{});
         topology_type topol(10);
@@ -893,7 +892,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ThreeSPN2BasePairIntearction_energy_and_force,
 
         interaction_type interaction(potential_type(potential),
             mjolnir::SpatialPartition<traits_type, potential_type>(
-                mjolnir::make_unique<partition_type>()));
+                std::make_unique<partition_type>()));
 
         system_type sys(4, boundary_type{});
         topology_type topol(4);
@@ -1143,7 +1142,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ThreeSPN2CrossStackingIntearction_energy_and_force
 
         interaction_type interaction(potential_type(potential),
             mjolnir::SpatialPartition<traits_type, potential_type>(
-                mjolnir::make_unique<partition_type>()));
+                std::make_unique<partition_type>()));
 
         system_type sys(10, boundary_type{});
         topology_type topol(10);

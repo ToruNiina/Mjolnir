@@ -13,7 +13,6 @@
 #include <mjolnir/forcefield/MultipleBasin/MultipleBasin3BasinUnit.hpp>
 #include <mjolnir/forcefield/local/BondLengthInteraction.hpp>
 #include <mjolnir/forcefield/local/HarmonicPotential.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 #include <random>
 
@@ -40,11 +39,11 @@ BOOST_AUTO_TEST_CASE(MultipleBasin_2Basin_numerical_difference)
     param1.emplace_back(std::array<std::size_t, 2>{{0,1}}, potential_type(k, native1));
     param2.emplace_back(std::array<std::size_t, 2>{{0,1}}, potential_type(k, native2));
 
-    loc1.emplace(mjolnir::make_unique<interaction_type>("none", std::move(param1)));
-    loc2.emplace(mjolnir::make_unique<interaction_type>("none", std::move(param2)));
+    loc1.emplace(std::make_unique<interaction_type>("none", std::move(param1)));
+    loc2.emplace(std::make_unique<interaction_type>("none", std::move(param2)));
 
     std::unique_ptr<mjolnir::MultipleBasinUnitBase<traits_type>> unit1 =
-        mjolnir::make_unique<mjolnir::MultipleBasin2BasinUnit<traits_type>>(
+        std::make_unique<mjolnir::MultipleBasin2BasinUnit<traits_type>>(
             -10.0, "short", "long", 0.0, 0.0,
             std::make_tuple(std::move(loc1), std::move(glo1), std::move(ext1)),
             std::make_tuple(std::move(loc2), std::move(glo2), std::move(ext2)));
@@ -189,12 +188,12 @@ BOOST_AUTO_TEST_CASE(MultipleBasin_3Basin_numerical_difference)
     param2.emplace_back(std::array<std::size_t, 2>{{0,1}}, potential_type(k, native2));
     param3.emplace_back(std::array<std::size_t, 2>{{0,1}}, potential_type(k, native3));
 
-    loc1.emplace(mjolnir::make_unique<interaction_type>("none", std::move(param1)));
-    loc2.emplace(mjolnir::make_unique<interaction_type>("none", std::move(param2)));
-    loc3.emplace(mjolnir::make_unique<interaction_type>("none", std::move(param3)));
+    loc1.emplace(std::make_unique<interaction_type>("none", std::move(param1)));
+    loc2.emplace(std::make_unique<interaction_type>("none", std::move(param2)));
+    loc3.emplace(std::make_unique<interaction_type>("none", std::move(param3)));
 
     std::unique_ptr<mjolnir::MultipleBasinUnitBase<traits_type>> unit1 =
-        mjolnir::make_unique<mjolnir::MultipleBasin3BasinUnit<traits_type>>(
+        std::make_unique<mjolnir::MultipleBasin3BasinUnit<traits_type>>(
             "short", "middle", "long", -10.0, -10.0, -10.0, 0.0, 0.0, 0.0,
             std::make_tuple(std::move(loc1), std::move(glo1), std::move(ext1)),
             std::make_tuple(std::move(loc2), std::move(glo2), std::move(ext2)),

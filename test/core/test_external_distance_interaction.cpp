@@ -11,7 +11,6 @@
 #include <mjolnir/forcefield/external/ExternalDistanceInteraction.hpp>
 #include <mjolnir/forcefield/external/ExcludedVolumeWallPotential.hpp>
 #include <mjolnir/core/AxisAlignedPlane.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <random>
 
 BOOST_AUTO_TEST_CASE(ExternalDistanceInteraction_numerical_difference)

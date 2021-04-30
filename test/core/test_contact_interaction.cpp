@@ -10,7 +10,6 @@
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/forcefield/local/ContactInteraction.hpp>
 #include <mjolnir/forcefield/local/GoContactPotential.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 BOOST_AUTO_TEST_CASE(Contact_calc_force)
 {

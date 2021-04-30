@@ -2,7 +2,6 @@
 #define MJOLNIR_CORE_SPATIAL_PARTITON_BASE_HPP
 #include <mjolnir/core/System.hpp>
 #include <mjolnir/core/NeighborList.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <memory>
 
 namespace mjolnir

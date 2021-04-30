@@ -6,7 +6,6 @@
 #include <mjolnir/forcefield/external/PositionRestraintInteraction.hpp>
 #include <mjolnir/forcefield/external/RectangularBoxInteraction.hpp>
 #include <mjolnir/core/AxisAlignedPlane.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/throw_exception.hpp>
 #include <mjolnir/util/logger.hpp>
 #include <mjolnir/input/read_external_potential.hpp>
@@ -36,7 +35,7 @@ read_external_distance_interaction(const toml::value& external, shapeT&& shape)
         using interaction_t = ExternalDistanceInteraction<
                                     traitsT, potential_t, shapeT>;
 
-        return make_unique<interaction_t>(std::move(shape),
+        return std::make_unique<interaction_t>(std::move(shape),
              read_implicit_membrane_potential<real_type>(external));
     }
     else if(potential == "LennardJonesWall")
@@ -45,7 +44,7 @@ read_external_distance_interaction(const toml::value& external, shapeT&& shape)
         using potential_t   = LennardJonesWallPotential<real_type>;
         using interaction_t = ExternalDistanceInteraction<
                                     traitsT, potential_t, shapeT>;
-        return make_unique<interaction_t>(std::move(shape),
+        return std::make_unique<interaction_t>(std::move(shape),
              read_lennard_jones_wall_potential<real_type>(external));
     }
     else if(potential == "ExcludedVolumeWall")
@@ -54,7 +53,7 @@ read_external_distance_interaction(const toml::value& external, shapeT&& shape)
         using potential_t   = ExcludedVolumeWallPotential<real_type>;
         using interaction_t = ExternalDistanceInteraction<
                                     traitsT, potential_t, shapeT>;
-        return make_unique<interaction_t>(std::move(shape),
+        return std::make_unique<interaction_t>(std::move(shape),
              read_excluded_volume_wall_potential<real_type>(external));
     }
     else
@@ -193,7 +192,7 @@ read_external_position_restraint_interaction(const toml::value& external)
             const auto pot = read_harmonic_potential<real_type>(para, env);
             potentials.emplace_back(idx, crd, pot);
         }
-        return make_unique<interaction_t>(std::move(potentials));
+        return std::make_unique<interaction_t>(std::move(potentials));
     }
     else
     {
@@ -253,7 +252,7 @@ read_external_recutangular_box_interaction(const toml::value& external)
         using potential_t   = ExcludedVolumeWallPotential<real_type>;
         using interaction_t = RectangularBoxInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(lower, upper, margin,
+        return std::make_unique<interaction_t>(lower, upper, margin,
              read_excluded_volume_wall_potential<real_type>(external));
     }
     else if(potential == "LennardJonesWall")
@@ -262,7 +261,7 @@ read_external_recutangular_box_interaction(const toml::value& external)
         using potential_t   = LennardJonesWallPotential<real_type>;
         using interaction_t = RectangularBoxInteraction<traitsT, potential_t>;
 
-        return make_unique<interaction_t>(lower, upper, margin,
+        return std::make_unique<interaction_t>(lower, upper, margin,
              read_lennard_jones_wall_potential<real_type>(external));
     }
     else
@@ -320,7 +319,7 @@ read_afm_flexible_fitting_interaction(const toml::value& external)
     {
         image.push_back(img);
     }
-    return make_unique<interaction_t>(k, gamma, z0, cutoff, margin,
+    return std::make_unique<interaction_t>(k, gamma, z0, cutoff, margin,
             sigma_x, sigma_y, pixel_x, pixel_y, length_x, length_y,
             std::move(radii), std::move(image));
 }

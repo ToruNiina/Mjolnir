@@ -7,7 +7,6 @@
 #endif
 
 #include <mjolnir/math/constants.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/SimulatorTraits.hpp>
 #include <mjolnir/forcefield/3SPN2/ThreeSPN2BaseStackingInteraction.hpp>

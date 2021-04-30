@@ -13,7 +13,6 @@
 #include <mjolnir/omp/System.hpp>
 #include <mjolnir/omp/RandomNumberGenerator.hpp>
 #include <mjolnir/omp/BondLengthInteraction.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 BOOST_AUTO_TEST_CASE(omp_BondLength_calc_force)
 {

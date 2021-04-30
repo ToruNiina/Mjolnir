@@ -8,7 +8,6 @@
 #include <mjolnir/core/DCDObserver.hpp>
 #include <mjolnir/core/TRRObserver.hpp>
 #include <mjolnir/util/logger.hpp>
-#include <mjolnir/util/make_unique.hpp>
 
 namespace mjolnir
 {
@@ -29,21 +28,21 @@ void add_observer(ObserverContainer<traitsT>& observers,
     {
         using observer_type = XYZObserver<traitsT>;
         MJOLNIR_LOG_NOTICE("output xyz format.");
-        observers.push_back(make_unique<observer_type>(file_prefix));
+        observers.push_back(std::make_unique<observer_type>(file_prefix));
         return;
     }
     else if(format.as_string() == "dcd")
     {
         using observer_type = DCDObserver<traitsT>;
         MJOLNIR_LOG_NOTICE("output dcd format.");
-        observers.push_back(make_unique<observer_type>(file_prefix));
+        observers.push_back(std::make_unique<observer_type>(file_prefix));
         return;
     }
     else if(format.as_string() == "trr")
     {
         using observer_type = TRRObserver<traitsT>;
         MJOLNIR_LOG_NOTICE("output trr format.");
-        observers.push_back(make_unique<observer_type>(file_prefix));
+        observers.push_back(std::make_unique<observer_type>(file_prefix));
         return;
     }
     else
@@ -96,7 +95,7 @@ read_observer(const toml::value& root)
     }
 
     // Energy is always written to "prefix.ene".
-    observers.push_back(make_unique<EnergyObserver<traitsT>>(file_prefix));
+    observers.push_back(std::make_unique<EnergyObserver<traitsT>>(file_prefix));
     return observers;
 }
 

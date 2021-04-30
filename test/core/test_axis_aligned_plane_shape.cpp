@@ -10,7 +10,6 @@
 #include <mjolnir/core/BoundaryCondition.hpp>
 #include <mjolnir/core/System.hpp>
 #include <mjolnir/core/AxisAlignedPlane.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <random>
 #include <cmath>
 

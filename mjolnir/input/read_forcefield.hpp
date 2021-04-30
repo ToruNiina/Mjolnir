@@ -93,7 +93,7 @@ read_default_forcefield(const toml::value& root, const std::size_t N)
                 read_table_from_file(constraints.at(i), "constraint"));
         }
     }
-    return make_unique<ForceField<traitsT>>(std::move(loc), std::move(glo),
+    return std::make_unique<ForceField<traitsT>>(std::move(loc), std::move(glo),
                                             std::move(ext), std::move(con));
 }
 
@@ -252,7 +252,7 @@ read_multiple_basin_forcefield(const toml::value& root, const toml::value& simul
             auto ff1 = read_forcefield_elements(ffs.at(names.at(0)).second);
             auto ff2 = read_forcefield_elements(ffs.at(names.at(1)).second);
 
-            units.push_back(make_unique<MultipleBasin2BasinUnit<traitsT>>(delta,
+            units.push_back(std::make_unique<MultipleBasin2BasinUnit<traitsT>>(delta,
                     names.at(0), names.at(1), dVs.at(0), dVs.at(1),
                     std::move(ff1), std::move(ff2)));
         }
@@ -305,7 +305,7 @@ read_multiple_basin_forcefield(const toml::value& root, const toml::value& simul
             auto ff2 = read_forcefield_elements(ffs.at(names.at(1)).second);
             auto ff3 = read_forcefield_elements(ffs.at(names.at(2)).second);
 
-            units.push_back(make_unique<MultipleBasin3BasinUnit<traitsT>>(
+            units.push_back(std::make_unique<MultipleBasin3BasinUnit<traitsT>>(
                     names.at(0), names.at(1), names.at(2),
                     delta12, delta23, delta31, dVs.at(0), dVs.at(1), dVs.at(2),
                     std::move(ff1), std::move(ff2), std::move(ff3)));
@@ -365,7 +365,7 @@ read_multiple_basin_forcefield(const toml::value& root, const toml::value& simul
                 read_table_from_file(constraints.at(i), "constraint"));
         }
     }
-    return make_unique<MultipleBasinForceField<traitsT>>(
+    return std::make_unique<MultipleBasinForceField<traitsT>>(
             read_forcefield_elements(common), std::move(con), std::move(units));
 }
 

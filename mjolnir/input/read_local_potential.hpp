@@ -21,7 +21,6 @@
 
 #include <mjolnir/core/Topology.hpp>
 #include <mjolnir/util/string.hpp>
-#include <mjolnir/util/make_unique.hpp>
 #include <mjolnir/util/throw_exception.hpp>
 #include <mjolnir/util/logger.hpp>
 
