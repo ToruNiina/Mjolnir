@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(test_empty_message)
         {
             mjolnir::throw_exception<std::exception>();
         }
-        catch(std::runtime_error const& re)
+        catch(std::exception const& re)
         {
             what = re.what();
         }
