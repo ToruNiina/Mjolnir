@@ -1,6 +1,5 @@
 #ifndef MJOLNIR_MATH_MATRIX_HPP
 #define MJOLNIR_MATH_MATRIX_HPP
-#include <mjolnir/util/type_traits.hpp>
 #include <algorithm>
 #include <array>
 #include <ostream>
@@ -56,7 +55,7 @@ class Matrix
     Matrix(Ts&& ... vs) noexcept: values_{{static_cast<value_type>(vs)...}}
     {
         static_assert(sizeof...(Ts) == total_size, "");
-        static_assert(conjunction<
+        static_assert(std::conjunction<
                 std::is_convertible<Ts, value_type> ...>::value, "");
     }
 

@@ -2,7 +2,6 @@
 #define MJOLNIR_INPUT_UTILITY_HPP
 #include <extlib/toml/toml.hpp>
 #include <mjolnir/input/read_path.hpp>
-#include <mjolnir/util/type_traits.hpp>
 #include <mjolnir/util/string.hpp>
 #include <mjolnir/util/logger.hpp>
 #include <mjolnir/math/Matrix.hpp>
@@ -72,7 +71,7 @@ T find_parameter(const toml::value& params, const toml::value& env,
 // This function was introduced to support those
 // multi-named parameters but is planned to be removed in the later release.
 template<typename T>
-typename std::enable_if<negation<std::is_same<T, std::string>>::value, T>::type
+typename std::enable_if<std::negation<std::is_same<T, std::string>>::value, T>::type
 find_parameter(const toml::value& params, const toml::value& env,
                const std::string& name1,  const std::string& name2)
 {
