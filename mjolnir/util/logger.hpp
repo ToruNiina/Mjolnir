@@ -28,7 +28,6 @@ namespace mjolnir
  * - MJOLNIR_LOG_SCOPE    -- helps logging by indentation.                   *
  * - MJOLNIR_LOG_FUNCTION -- helps logging by indentation.                   *
  *
- * - MJOLNIR_GET_LOGGER -- get a logger for the current scope with name.     *
  * - MJOLNIR_GET_DEFAULT_LOGGER -- get a default logger.                     */
 
 namespace logger_detail
@@ -40,9 +39,8 @@ namespace logger_detail
 // `logger_detail`. loggers first imports this namespace and output using these
 // operators.
 
-template<typename charT, typename traits, typename Iterator>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os, const range<Iterator>& rg)
+template<typename Iterator>
+std::ostream& operator<<(std::ostream& os, const range<Iterator>& rg)
 {
     os << '[';
     for(const auto& v : rg){os << v << ", ";}
@@ -50,9 +48,8 @@ operator<<(std::basic_ostream<charT, traits>& os, const range<Iterator>& rg)
     return os;
 }
 
-template<typename charT, typename traits, typename T, std::size_t N>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os, const std::array<T, N>& ar)
+template<typename T, std::size_t N>
+std::ostream& operator<<(std::ostream& os, const std::array<T, N>& ar)
 {
     os << '[';
     for(const auto& v : ar){os << v << ", ";}
@@ -60,10 +57,8 @@ operator<<(std::basic_ostream<charT, traits>& os, const std::array<T, N>& ar)
     return os;
 }
 
-template<typename charT, typename traits, typename T, typename Alloc>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os,
-           const std::vector<T, Alloc>& vc)
+template<typename T, typename Alloc>
+std::ostream& operator<<(std::ostream& os, const std::vector<T, Alloc>& vc)
 {
     os << '[';
     for(const auto& item : vc){os << item << ", ";}
@@ -71,11 +66,8 @@ operator<<(std::basic_ostream<charT, traits>& os,
     return os;
 }
 
-template<typename charT, typename traits, typename Key, typename Value,
-         typename Comp, typename Alloc>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os,
-           const std::map<Key, Value, Comp, Alloc>& mp)
+template<typename Key, typename Value, typename Comp, typename Alloc>
+std::ostream& operator<<(std::ostream& os, const std::map<Key, Value, Comp, Alloc>& mp)
 {
     os << '{';
     for(const auto& kv : mp){os << kv.first << '=' << kv.second << ", ";}
@@ -83,11 +75,8 @@ operator<<(std::basic_ostream<charT, traits>& os,
     return os;
 }
 
-template<typename charT, typename traits, typename Key, typename Value,
-         typename Hash, typename Pred, typename Alloc>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os,
-           const std::unordered_map<Key, Value, Hash, Pred, Alloc>& mp)
+template<typename Key, typename Value, typename Hash, typename Pred, typename Alloc>
+std::ostream& operator<<(std::ostream& os, const std::unordered_map<Key, Value, Hash, Pred, Alloc>& mp)
 {
     os << '{';
     for(const auto& kv : mp){os << kv.first << '=' << kv.second << ", ";}
@@ -95,59 +84,37 @@ operator<<(std::basic_ostream<charT, traits>& os,
     return os;
 }
 
-template<typename charT, typename traits, typename T1, typename T2>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os, const std::pair<T1, T2>& pr)
+template<typename T1, typename T2>
+std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& pr)
 {
     os << '[' << pr.first << ", " << pr.second << ']';
     return os;
 }
 
-template<std::size_t I, std::size_t N>
-struct tuple_output_helper
+template<typename ... Ts, std::size_t ... Is>
+void tuple_output_helper(std::ostream& os, const std::tuple<Ts...>& t,
+                         std::index_sequence<Is...>)
 {
-    template<typename charT, typename traits, typename ... Ts>
-    static std::basic_ostream<charT, traits>&
-    invoke(std::basic_ostream<charT, traits>& os, const std::tuple<Ts...>& t)
-    {
-        static_assert(N == sizeof...(Ts), "");
-        os << std::get<I>(t) << ", ";
-        return tuple_output_helper<I+1, N>::invoke(os, t);
-    }
-};
-template<std::size_t N>
-struct tuple_output_helper<N, N>
-{
-    template<typename charT, typename traits, typename ... Ts>
-    static std::basic_ostream<charT, traits>&
-    invoke(std::basic_ostream<charT, traits>& os, const std::tuple<Ts...>&)
-    {
-        static_assert(N == sizeof...(Ts), "");
-        return os;
-    }
-};
-template<typename charT, typename traits, typename ... Ts>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os, const std::tuple<Ts...>& t)
+    (..., (os << (Is == 0 ? "" : ", ") << std::get<Is>(t)));
+    return;
+}
+
+template<typename ... Ts>
+std::ostream& operator<<(std::ostream& os, const std::tuple<Ts...>& t)
 {
     os << '[';
-    tuple_output_helper<0, sizeof...(Ts)>::invoke(os, t);
+    tuple_output_helper(os, t, std::make_index_sequence<sizeof...(Ts)>{});
     os << ']';
     return os;
 }
 
 } // logger_detail
 
-template<typename charT, typename traits = std::char_traits<charT>>
-class basic_logger
+class Logger
 {
   public:
 
-    using string_type  = std::basic_string <charT, traits>;
-    using fstream_type = std::basic_fstream<charT, traits>;
-    using ostream_type = std::basic_ostream<charT, traits>;
-
-    static constexpr std::size_t indent_size = 2;
+    static constexpr inline std::size_t indent_size = 2;
 
     enum class Level : std::uint8_t
     {
@@ -161,18 +128,18 @@ class basic_logger
 
   public:
 
-    explicit basic_logger(const std::string& fname)
-        : indentation_needed_(false), indent_(0), fname_(fname)
+    explicit Logger(const std::string& fname)
+        : indentation_needed_(true), indent_(0), fname_(fname)
     {
         // clear the contents and check the file can be opened
-        fstream_type ofs(this->fname_, std::ios_base::out);
+        std::ofstream ofs(this->fname_);
         if(!ofs.good())
         {
             std::cerr << "logger: file open error: " << fname_ << std::endl;
             std::exit(1);
         }
     }
-    ~basic_logger() = default;
+    ~Logger() = default;
 
     void indent()   noexcept {indent_ += 1; return;}
     void unindent() noexcept {indent_ -= 1; return;}
@@ -180,7 +147,7 @@ class basic_logger
     template<typename ... Ts>
     void log(Level level, Ts&& ... args)
     {
-        fstream_type ofs(this->fname_, std::ios_base::out | std::ios_base::app);
+        std::fstream ofs(this->fname_, std::ios_base::out | std::ios_base::app);
         if(!ofs.good())
         {
             throw_exception<std::runtime_error>(
@@ -188,7 +155,7 @@ class basic_logger
         }
         if(this->indentation_needed_)
         {
-            ofs << string_type(indent_size * indent_, ' ');
+            ofs << std::string(indent_size * indent_, ' ');
         }
 
         if(level == Level::Notice || level == Level::Warn || level == Level::Error)
@@ -197,27 +164,18 @@ class basic_logger
             std::cerr << "-- ";
             if(level == Level::Warn)
             {
-                std::cerr << '[' << io::bold << io::yellow << "warning"
-                          << io::nocolor << "] " << io::bold;
-                output_message(std::cerr, std::forward<Ts>(args)...);
-                std::cerr << io::nocolor;
+                std::cerr << '[' << io::bold << io::yellow << "warning" << io::nocolor << "] ";
             }
             else if(level == Level::Error)
             {
-                std::cerr << '[' << io::bold << io::red << "error"
-                          << io::nocolor << "] " << io::bold;
-                output_message(std::cerr, std::forward<Ts>(args)...);
-                std::cerr << io::nocolor;
+                std::cerr << '[' << io::bold << io::red << "error" << io::nocolor << "] ";
             }
-            else
-            {
-                output_message(std::cerr, std::forward<Ts>(args)...);
-            }
-            std::cerr << std::endl;
+            output_message(std::cerr, io::bold, std::forward<Ts>(args)..., io::nocolor);
+            std::cerr << std::endl; // output immediately (flush)
         }
 
         output_message(ofs, this->stringize(level), std::forward<Ts>(args)...);
-        ofs << std::endl;
+        ofs << std::endl; // output immediately (flush)
 
         this->indentation_needed_ = true;
         return;
@@ -226,7 +184,7 @@ class basic_logger
     template<typename ... Ts>
     void log_no_lf(Level level, Ts&& ... args)
     {
-        fstream_type ofs(this->fname_, std::ios_base::out | std::ios_base::app);
+        std::fstream ofs(this->fname_, std::ios_base::out | std::ios_base::app);
         if(!ofs.good())
         {
             throw_exception<std::runtime_error>(
@@ -234,7 +192,7 @@ class basic_logger
         }
         if(this->indentation_needed_)
         {
-            ofs << string_type(indent_size * indent_, ' ');
+            ofs << std::string(indent_size * indent_, ' ');
         }
 
         if(level == Level::Notice || level == Level::Warn || level == Level::Error)
@@ -254,7 +212,7 @@ class basic_logger
         }
 
         output_message(ofs, this->stringize(level), std::forward<Ts>(args)...);
-        ofs << std::flush;
+        std::cerr << std::flush;
 
         this->indentation_needed_ = false;
         return;
@@ -276,27 +234,25 @@ class basic_logger
         }
     }
 
-    template<typename T, typename ...T_args>
-    static void output_message(ostream_type& os, T&& arg1, T_args&& ...args)
+    template<typename ... Args>
+    static void output_message(std::ostream& os, Args&& ... args)
     {
-        using namespace logger_detail; // to output containers
-        os << arg1;
-        return output_message(os, std::forward<T_args>(args)...);
+        using namespace logger_detail; // import container output operators
+        (os << ... << args);
+        return;
     }
-    static void output_message(ostream_type&) {return;}
 
   private:
 
     bool indentation_needed_;
     std::size_t indent_;
-    string_type  fname_;
+    std::string fname_;
 };
 
-template<typename charT, typename traitsT = std::char_traits<charT>>
-class basic_logger_manager
+class LoggerManager
 {
   public:
-    using logger_type    = basic_logger<charT, traitsT>;
+    using logger_type    = Logger;
     using resource_type  = std::unique_ptr<logger_type>;
     using container_type = std::map<std::string, resource_type>;
 
@@ -327,12 +283,12 @@ class basic_logger_manager
     {
         if(default_.empty())
         {
-            throw_exception<std::out_of_range>("mjolnir::basic_logger_manager: "
+            throw_exception<std::out_of_range>("mjolnir::LoggerManager: "
                 "default logger is not set yet.");
         }
         if(loggers_.count(default_) == 0)
         {
-            throw_exception<std::out_of_range>("mjolnir::basic_logger_manager: "
+            throw_exception<std::out_of_range>("mjolnir::LoggerManager: "
                 "default logger (", default_, ") does not exist");
         }
         return *(loggers_.at(default_));
@@ -349,29 +305,15 @@ class basic_logger_manager
 
   private:
 
-    static std::string    default_;
-    static container_type loggers_;
+    static inline std::string    default_;
+    static inline container_type loggers_;
 };
 
-template<typename charT, typename traitsT>
-typename basic_logger_manager<charT, traitsT>::container_type
-basic_logger_manager<charT, traitsT>::loggers_;
-
-template<typename charT, typename traitsT>
-std::string basic_logger_manager<charT, traitsT>::default_;
-
-template<typename charT, typename traitsT = std::char_traits<charT>>
-class basic_scope
+class Scope
 {
   public:
-    using char_type   = charT;
-    using traits_type = traitsT;
-    using logger_type = basic_logger<char_type, traits_type>;
 
-  public:
-
-    basic_scope(logger_type& trc,
-                const std::string& name, const std::string& loc)
+    Scope(Logger& trc, const std::string& name, const std::string& loc)
       : start_(std::chrono::system_clock::now()), logger_(trc),
         name_(name), location_(loc)
     {
@@ -384,14 +326,14 @@ class basic_scope
             name_.erase(name_.begin() + offset, name_.end());
         }
 #endif
-        logger_.log(logger_type::Level::None, this->name_, " {");
-        logger_.log(logger_type::Level::None, "--> ", this->location_, ':');
+        logger_.log(Logger::Level::None, this->name_, " {");
+        logger_.log(Logger::Level::None, "--> ", this->location_, ':');
         logger_.indent();
     }
-    ~basic_scope()
+    ~Scope()
     {
         logger_.unindent();
-        logger_.log(logger_type::Level::None, "} ", this->format_duration(
+        logger_.log(Logger::Level::None, "} ", this->format_duration(
                     std::chrono::system_clock::now() - this->start_));
     }
 
@@ -423,21 +365,16 @@ class basic_scope
 
   private:
     std::chrono::system_clock::time_point start_;
-    logger_type& logger_;
+    Logger& logger_;
     std::string name_;
     std::string location_;
 };
-
-using Logger        = basic_logger<char>;
-using LoggerManager = basic_logger_manager<char>;
-using Scope         = basic_scope<char>;
 
 // set name of the default log file.
 #define MJOLNIR_SET_DEFAULT_LOGGER(name)  LoggerManager::set_default_logger(name)
 
 // get logger
 #define MJOLNIR_GET_DEFAULT_LOGGER() auto& l_o_g_g_e_r_ = LoggerManager::get_default_logger()
-#define MJOLNIR_GET_LOGGER(name)     auto& l_o_g_g_e_r_ = LoggerManager::get_logger(name)
 
 // normal log
 #define MJOLNIR_LOG_INFO(...)   l_o_g_g_e_r_.log(Logger::Level::Info,   __VA_ARGS__)

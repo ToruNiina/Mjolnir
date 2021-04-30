@@ -10,8 +10,7 @@ namespace mjolnir
 {
 namespace io
 {
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& bold(std::basic_ostream<charT, traits>& os)
+inline std::ostream& bold(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -19,8 +18,7 @@ std::basic_ostream<charT, traits>& bold(std::basic_ostream<charT, traits>& os)
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& red(std::basic_ostream<charT, traits>& os)
+inline std::ostream& red(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -28,8 +26,7 @@ std::basic_ostream<charT, traits>& red(std::basic_ostream<charT, traits>& os)
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& green(std::basic_ostream<charT, traits>& os)
+inline std::ostream& green(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -37,8 +34,7 @@ std::basic_ostream<charT, traits>& green(std::basic_ostream<charT, traits>& os)
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& yellow(std::basic_ostream<charT, traits>& os)
+inline std::ostream& yellow(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -46,8 +42,7 @@ std::basic_ostream<charT, traits>& yellow(std::basic_ostream<charT, traits>& os)
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& blue(std::basic_ostream<charT, traits>& os)
+inline std::ostream& blue(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -55,8 +50,7 @@ std::basic_ostream<charT, traits>& blue(std::basic_ostream<charT, traits>& os)
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& magenta(std::basic_ostream<charT, traits>& os)
+inline std::ostream& magenta(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -64,8 +58,7 @@ std::basic_ostream<charT, traits>& magenta(std::basic_ostream<charT, traits>& os
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& cyan(std::basic_ostream<charT, traits>& os)
+inline std::ostream& cyan(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -73,8 +66,7 @@ std::basic_ostream<charT, traits>& cyan(std::basic_ostream<charT, traits>& os)
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& white(std::basic_ostream<charT, traits>& os)
+inline std::ostream& white(std::ostream& os)
 {
     if(detail::isatty(os))
     {
@@ -82,38 +74,13 @@ std::basic_ostream<charT, traits>& white(std::basic_ostream<charT, traits>& os)
     }
     return os;
 }
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& nocolor(std::basic_ostream<charT, traits>& os)
+inline std::ostream& nocolor(std::ostream& os)
 {
     if(detail::isatty(os))
     {
         os << "\x1b[0m";
     }
     return os;
-}
-
-template<typename charT, typename traits>
-struct basic_lock_nocolor
-{
-    explicit basic_lock_nocolor(std::basic_ostream<charT, traits>& os) noexcept
-        : os_(std::addressof(os))
-    {}
-    ~basic_lock_nocolor() noexcept
-    {
-        if(os_)
-        {
-            *os_ << nocolor;
-        }
-    }
-  private:
-    std::basic_ostream<charT, traits>* os_;
-};
-
-template<typename charT, typename traits>
-basic_lock_nocolor<charT, traits>
-lock_nocolor(std::basic_ostream<charT, traits>& os) noexcept
-{
-    return basic_lock_nocolor<charT, traits>(os);
 }
 
 } // io
