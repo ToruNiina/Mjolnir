@@ -9,9 +9,16 @@ namespace mjolnir
 template<typename Exception, typename ...Args>
 [[noreturn]] void throw_exception(Args&& ... args)
 {
-    std::ostringstream oss;
-    (oss << ... << args);
-    throw Exception(oss.str());
+    if constexpr(sizeof...(args) != 0)
+    {
+        std::ostringstream oss;
+        (oss << ... << args);
+        throw Exception(oss.str());
+    }
+    else
+    {
+        throw Exception{};
+    }
 }
 
 } // mjolnir
