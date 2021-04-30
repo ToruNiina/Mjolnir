@@ -3,8 +3,8 @@ enable_testing()
 project(mjolnir)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD          11) # use c++11
-set(CMAKE_CXX_EXTENSIONS       OFF) # not gnu11, c++11
+set(CMAKE_CXX_STANDARD          17) # use c++17
+set(CMAKE_CXX_EXTENSIONS       OFF) # not gnu17, standard c++17
 
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/extlib)
