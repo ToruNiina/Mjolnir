@@ -66,17 +66,5 @@ BOOST_AUTO_TEST_CASE(test_what_message)
 
 BOOST_AUTO_TEST_CASE(test_empty_message)
 {
-    {
-        std::string what;
-        try
-        {
-            mjolnir::throw_exception<std::exception>();
-        }
-        catch(std::exception const& re)
-        {
-            what = re.what();
-        }
-
-        BOOST_TEST(what.empty());
-    }
+    BOOST_CHECK_THROW(mjolnir::throw_exception<std::exception>(), std::exception);
 }
