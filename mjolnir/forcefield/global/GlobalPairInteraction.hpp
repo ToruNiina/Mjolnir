@@ -212,6 +212,7 @@ GlobalPairInteraction<traitsT, potT>::calc_force_and_energy(
 #include <mjolnir/forcefield/global/GlobalPairExcludedVolumeInteraction.hpp>
 #include <mjolnir/forcefield/global/GlobalPairLennardJonesInteraction.hpp>
 #include <mjolnir/forcefield/global/GlobalPairUniformLennardJonesInteraction.hpp>
+#include <mjolnir/forcefield/global/GlobalPairWCAInteraction.hpp>
 
 #ifdef MJOLNIR_SEPARATE_BUILD
 // explicitly specialize BondAngleInteraction with LocalPotentials
