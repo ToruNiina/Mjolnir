@@ -13,6 +13,7 @@ set(TEST_NAMES
     test_omp_dihedral_angle_interaction
 
     test_omp_global_lennard_jones_interaction
+    test_omp_global_wca_interaction
     test_omp_global_uniform_lennard_jones_interaction
     test_omp_global_excluded_volume_interaction
     test_omp_global_debye_huckel_interaction
